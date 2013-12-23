@@ -118,7 +118,6 @@
     if (self.leftFoldView) [self.leftFoldView removeFromSuperview];
     self.leftFoldView = [[MultiFoldView alloc] initWithFrame:CGRectMake(0,0,view.frame.size.width,self.frame.size.height) foldDirection:FoldDirectionHorizontalLeftToRight folds:leftViewFoldCount pullFactor:leftViewPullFactor];
     [self.leftFoldView setDelegate:self];
-    [self.leftFoldView setUseOptimizedScreenshot:self.useOptimizedScreenshot];
     [self.leftFoldView setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
     [self insertSubview:self.leftFoldView belowSubview:self.contentView];
     [self.leftFoldView setContent:view];
@@ -141,7 +140,6 @@
 {
     self.rightFoldView = [[MultiFoldView alloc] initWithFrame:CGRectMake(self.frame.size.width,0,view.frame.size.width,self.frame.size.height) foldDirection:FoldDirectionHorizontalRightToLeft folds:rightViewFoldCount pullFactor:rightViewPullFactor];
     [self.rightFoldView setDelegate:self];
-    [self.rightFoldView setUseOptimizedScreenshot:self.useOptimizedScreenshot];
     [self.rightFoldView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleHeight];
     [self.contentView insertSubview:self.rightFoldView atIndex:0];
     [self.rightFoldView setContent:view];
