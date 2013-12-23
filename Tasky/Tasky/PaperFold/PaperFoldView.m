@@ -216,18 +216,6 @@
                 }
             }
         }
-        else if (x<0)
-        {
-            if ((x<=-kRightViewUnfoldThreshold*self.rightFoldView.frame.size.width && _state==PaperFoldStateDefault) || [self.contentView frame].origin.x==-self.rightFoldView.frame.size.width)
-            {
-                if (self.enableRightFoldDragging)
-                {
-                    // if offset more than threshold, open fully
-                    self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(unfoldRightView:) userInfo:nil repeats:YES];
-                    return;
-                }
-            }
-        }
         
         // after panning completes
         // if offset does not exceed threshold
@@ -339,28 +327,6 @@
     [self animateWithContentOffset:CGPointMake(self.contentView.frame.origin.x, 0) panned:NO];
 }
 
-// unfold the right view
-- (void)unfoldRightView:(NSTimer*)timer
-{
-    [self.leftFoldView setHidden:NO];
-    [self.rightFoldView setHidden:NO];
-    
-    CGAffineTransform transform = [self.contentView transform];
-    float x = transform.tx - (transform.tx+self.rightFoldView.frame.size.width)/8;
-    transform = CGAffineTransformMakeTranslation(x, 0);
-    [self.contentView setTransform:transform];
-
-    if (x<=-self.rightFoldView.frame.size.width+5)
-    {
-        [timer invalidate];
-        transform = CGAffineTransformMakeTranslation(-self.rightFoldView.frame.size.width, 0);
-        [self.contentView setTransform:transform];
-    }
-    
-    // use the x value to animate folding
-    [self animateWithContentOffset:CGPointMake(self.contentView.frame.origin.x, 0) panned:NO];
-}
-
 // restore contentView back to original position
 - (void)restoreView:(NSTimer*)timer
 {
@@ -452,10 +418,6 @@
     {
         self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(unfoldLeftView:) userInfo:nil repeats:YES];
     }
-    else if (state==PaperFoldStateRightUnfolded)
-    {
-        self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(unfoldRightView:) userInfo:nil repeats:YES];
-    }
 }
 
 - (void)setPaperFoldState:(PaperFoldState)state
@@ -470,11 +432,6 @@
 - (void)unfoldLeftView
 {
 	[self setPaperFoldState:PaperFoldStateLeftUnfolded];
-}
-
-- (void)unfoldRightView
-{
-	[self setPaperFoldState:PaperFoldStateRightUnfolded];
 }
 
 - (void)finishForState:(PaperFoldState)state

@@ -103,6 +103,5 @@ typedef void (^CompletionBlock)();
 // deprecate methods
 // use setPaperFoldState: instead
 - (void)unfoldLeftView __attribute__((deprecated));
-- (void)unfoldRightView __attribute__((deprecated));
 
 @end
