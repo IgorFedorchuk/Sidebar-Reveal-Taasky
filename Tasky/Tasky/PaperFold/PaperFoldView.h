@@ -35,7 +35,6 @@
 #import <UIKit/UIKit.h>
 #import "FoldView.h"
 #import "MultiFoldView.h"
-#import "TouchThroughUIView.h"
 
 typedef void (^CompletionBlock)();
 
@@ -51,7 +50,7 @@ typedef void (^CompletionBlock)();
 @interface PaperFoldView : UIView <MultiFoldViewDelegate, UIGestureRecognizerDelegate>
 
 // main content view
-@property (nonatomic, strong) TouchThroughUIView *contentView;
+@property (nonatomic, strong) UIView *contentView;
 // timer to animate folds after gesture ended
 // manual animation with NSTimer is required to sync the offset of the contentView, with the folding of views
 @property (nonatomic, strong) NSTimer *animationTimer;
