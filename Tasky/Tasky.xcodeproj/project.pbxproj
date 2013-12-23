@@ -22,7 +22,6 @@
 		78FB57D81865E193003CD030 /* FacingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB57C21865E193003CD030 /* FacingView.m */; };
 		78FB57D91865E193003CD030 /* FoldView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB57C41865E193003CD030 /* FoldView.m */; };
 		78FB57DA1865E193003CD030 /* MultiFoldView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB57C61865E193003CD030 /* MultiFoldView.m */; };
-		78FB57DB1865E193003CD030 /* PaperFoldNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB57C91865E193003CD030 /* PaperFoldNavigationController.m */; };
 		78FB57DE1865E193003CD030 /* PaperFoldView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB57CE1865E193003CD030 /* PaperFoldView.m */; };
 		78FB57E11865E193003CD030 /* ShadowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB57D31865E193003CD030 /* ShadowView.m */; };
 		78FB57E31865E193003CD030 /* UIView+Screenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB57D71865E193003CD030 /* UIView+Screenshot.m */; };
@@ -69,8 +68,6 @@
 		78FB57C51865E193003CD030 /* MultiFoldView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiFoldView.h; sourceTree = "<group>"; };
 		78FB57C61865E193003CD030 /* MultiFoldView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiFoldView.m; sourceTree = "<group>"; };
 		78FB57C71865E193003CD030 /* PaperFoldConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaperFoldConstants.h; sourceTree = "<group>"; };
-		78FB57C81865E193003CD030 /* PaperFoldNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaperFoldNavigationController.h; sourceTree = "<group>"; };
-		78FB57C91865E193003CD030 /* PaperFoldNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaperFoldNavigationController.m; sourceTree = "<group>"; };
 		78FB57CD1865E193003CD030 /* PaperFoldView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaperFoldView.h; sourceTree = "<group>"; };
 		78FB57CE1865E193003CD030 /* PaperFoldView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaperFoldView.m; sourceTree = "<group>"; };
 		78FB57D21865E193003CD030 /* ShadowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowView.h; sourceTree = "<group>"; };
@@ -201,8 +198,6 @@
 				78FB57C51865E193003CD030 /* MultiFoldView.h */,
 				78FB57C61865E193003CD030 /* MultiFoldView.m */,
 				78FB57C71865E193003CD030 /* PaperFoldConstants.h */,
-				78FB57C81865E193003CD030 /* PaperFoldNavigationController.h */,
-				78FB57C91865E193003CD030 /* PaperFoldNavigationController.m */,
 				78FB57CD1865E193003CD030 /* PaperFoldView.h */,
 				78FB57CE1865E193003CD030 /* PaperFoldView.m */,
 				78FB57D21865E193003CD030 /* ShadowView.h */,
@@ -342,7 +337,6 @@
 				78FB57D91865E193003CD030 /* FoldView.m in Sources */,
 				6F582DA818648B3300D44537 /* AppDelegate.m in Sources */,
 				78FB57E31865E193003CD030 /* UIView+Screenshot.m in Sources */,
-				78FB57DB1865E193003CD030 /* PaperFoldNavigationController.m in Sources */,
 				78FB57DA1865E193003CD030 /* MultiFoldView.m in Sources */,
 				78FB57FF1865E9A4003CD030 /* PaperFoldMenuController.m in Sources */,
 				78FB57D81865E193003CD030 /* FacingView.m in Sources */,
