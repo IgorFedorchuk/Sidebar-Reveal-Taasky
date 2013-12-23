@@ -48,11 +48,6 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-    return [self initWithFrame:frame foldDirection:FoldDirectionHorizontalRightToLeft];
-}
-
-- (id)initWithFrame:(CGRect)frame foldDirection:(FoldDirection)foldDirection
-{
     if (self = [super initWithFrame:frame])
     {
         // content view holds a subview which is the actual displayed content
