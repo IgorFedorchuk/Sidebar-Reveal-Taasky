@@ -33,7 +33,14 @@
 
 
 #import "ShadowView.h"
+#import <QuartzCore/QuartzCore.h>
 
+@interface ShadowView ()
+
+@property (nonatomic, strong) NSMutableArray *colorsArray;
+@property (nonatomic, strong) CAGradientLayer *gradient;
+
+@end
 
 @implementation ShadowView
 
@@ -65,7 +72,7 @@
 		[self.colorsArray addObject:(id)[color CGColor]];
 	}
 	
-	if ([self.colorsArray count]>0)
+	if ([self.colorsArray count] > 0)
     {
         [self.gradient setColors:self.colorsArray];
     }
