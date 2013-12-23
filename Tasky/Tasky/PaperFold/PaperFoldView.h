@@ -86,11 +86,6 @@ typedef void (^CompletionBlock)();
 // offset are either sent from pan gesture recognizer, or manual animation done with NSTimer after gesture ended
 - (void)animateWithContentOffset:(CGPoint)point panned:(BOOL)panned;
 
-// set the right fold content view
-// and the right fold container view
-// with the number of folds and pull factor
-- (void)setRightFoldContentView:(UIView*)view foldCount:(int)rightViewFoldCount pullFactor:(float)rightViewPullFactor;
-
 // set the left fold content view
 // and set the left fold container view frame
 - (void)setLeftFoldContentView:(UIView*)view foldCount:(int)leftViewFoldCount pullFactor:(float)leftViewPullFactor;
@@ -109,7 +104,5 @@ typedef void (^CompletionBlock)();
 // use setPaperFoldState: instead
 - (void)unfoldLeftView __attribute__((deprecated));
 - (void)unfoldRightView __attribute__((deprecated));
-// set fold views
-- (void)setRightFoldContentView:(UIView*)view rightViewFoldCount:(int)rightViewFoldCount rightViewPullFactor:(float)rightViewPullFactor __attribute__((deprecated));;
 
 @end

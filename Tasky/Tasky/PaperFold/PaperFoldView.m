@@ -136,33 +136,6 @@
     self.enableLeftFoldDragging = YES;
 }
 
-- (void)setRightFoldContentView:(UIView*)view foldCount:(int)rightViewFoldCount pullFactor:(float)rightViewPullFactor
-{
-    self.rightFoldView = [[MultiFoldView alloc] initWithFrame:CGRectMake(self.frame.size.width,0,view.frame.size.width,self.frame.size.height) foldDirection:FoldDirectionHorizontalRightToLeft folds:rightViewFoldCount pullFactor:rightViewPullFactor];
-    [self.rightFoldView setDelegate:self];
-    [self.rightFoldView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleHeight];
-    [self.contentView insertSubview:self.rightFoldView atIndex:0];
-    [self.rightFoldView setContent:view];
-    [self.rightFoldView setHidden:YES];
-    [view setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
-    
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(self.contentView.frame.size.width,0,1,self.frame.size.height)];
-    [line setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
-    [self.contentView addSubview:line];
-    [line setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleHeight];
-    [line setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:0.5]];
-	line.alpha = 0;
-	self.rightDividerLine = line;
-    
-    self.enableRightFoldDragging = YES;
-}
-
-// this method is deprecated
-- (void)setRightFoldContentView:(UIView*)view rightViewFoldCount:(int)rightViewFoldCount rightViewPullFactor:(float)rightViewPullFactor
-{
-    [self setRightFoldContentView:view foldCount:rightViewFoldCount pullFactor:rightViewPullFactor];
-}
-
 - (void)onContentViewPanned:(UIPanGestureRecognizer*)gesture
 {
     // cancel gesture if another animation has not finished yet
