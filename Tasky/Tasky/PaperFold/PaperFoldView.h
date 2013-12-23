@@ -64,8 +64,6 @@ typedef void (^CompletionBlock)();
 // indicate if the fold was triggered by finger panning, or set state
 @property (nonatomic, assign) BOOL isAutomatedFolding;
 @property (nonatomic, assign) id<PaperFoldViewDelegate> delegate;
-// the initial panning direction
-@property (nonatomic, assign) PaperFoldInitialPanDirection paperFoldInitialPanDirection;
 // optimized screenshot follows the scale of the screen
 // non-optimized is always the non-retina image
 @property (nonatomic, assign) BOOL useOptimizedScreenshot;

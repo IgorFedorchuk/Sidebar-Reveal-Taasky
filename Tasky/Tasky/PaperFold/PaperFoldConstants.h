@@ -33,15 +33,6 @@ typedef enum
 {
     PaperFoldStateDefault = 0,
     PaperFoldStateLeftUnfolded = 1,
-    PaperFoldStateRightUnfolded = 2,
-    PaperFoldStateTopUnfolded = 3,
-    PaperFoldStateBottomUnfolded = 4,
-    PaperFoldStateTransition = 5
 } PaperFoldState;
-
-typedef enum
-{
-    PaperFoldInitialPanDirectionHorizontal = 0,
-} PaperFoldInitialPanDirection;
 
 #endif

@@ -140,30 +140,10 @@
     {
 		// show the divider while dragging
 		[self setShowDividerLines:YES animated:YES];
-
-		CGPoint velocity = [gesture velocityInView:self];
-        if ( abs(velocity.x) > abs(velocity.y))
-        {
-            if (self.state==PaperFoldStateDefault)
-            {
-                if (self.enableHorizontalEdgeDragging)
-                {
-                    CGPoint location = [gesture locationInView:self.contentView];
-                    if (location.x < kEdgeScrollWidth || location.x > (self.contentView.frame.size.width-kEdgeScrollWidth))
-                    {
-                        self.paperFoldInitialPanDirection = PaperFoldInitialPanDirectionHorizontal;
-                    }
-                }
-                else self.paperFoldInitialPanDirection = PaperFoldInitialPanDirectionHorizontal;
-            }
-        }
     }
     else
     {
-        if (self.paperFoldInitialPanDirection==PaperFoldInitialPanDirectionHorizontal)
-        {
-            [self onContentViewPannedHorizontally:gesture];
-        }
+        [self onContentViewPannedHorizontally:gesture];
         
 		if (gesture.state != UIGestureRecognizerStateChanged)
         {
@@ -211,55 +191,50 @@
         // if offset does not exceed threshold
         // use NSTimer to create manual animation to restore view
         self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(restoreView:) userInfo:nil repeats:YES];
-        
-        //self.paperFoldInitialPanDirection = PaperFoldInitialPanDirectionNone;
     }
 }
 
 - (void)animateWithContentOffset:(CGPoint)point panned:(BOOL)panned
 {
-    if (self.paperFoldInitialPanDirection==PaperFoldInitialPanDirectionHorizontal)
+    float x = point.x;
+    // if offset to the right, show the left view
+    // if offset to the left, show the right multi-fold view
+    
+    if (self.state!=self.lastState) self.lastState = self.state;
+    
+    if (x>0.0)
     {
-        float x = point.x;
-        // if offset to the right, show the left view
-        // if offset to the left, show the right multi-fold view
-        
-        if (self.state!=self.lastState) self.lastState = self.state;
-        
-        if (x>0.0)
+        if (self.enableLeftFoldDragging || !panned)
         {
-            if (self.enableLeftFoldDragging || !panned)
+            // set the limit of the right offset
+            if (x>=self.leftFoldView.frame.size.width)
             {
-                // set the limit of the right offset
-                if (x>=self.leftFoldView.frame.size.width)
-                {
-                    if (self.lastState != PaperFoldStateLeftUnfolded) {
-						[self finishForState:PaperFoldStateLeftUnfolded];
-					}
-                    self.lastState = self.state;
-                    self.state = PaperFoldStateLeftUnfolded;
-                    x = self.leftFoldView.frame.size.width;
+                if (self.lastState != PaperFoldStateLeftUnfolded) {
+                    [self finishForState:PaperFoldStateLeftUnfolded];
                 }
-                [self.contentView setTransform:CGAffineTransformMakeTranslation(x, 0)];
-                //[self.leftFoldView unfoldWithParentOffset:-1*x];
-                [self.leftFoldView unfoldWithParentOffset:x];
-                
-                if ([self.delegate respondsToSelector:@selector(paperFoldView:viewDidOffset:)])
-                {
-                    [self.delegate paperFoldView:self viewDidOffset:CGPointMake(x,0)];
-                }
+                self.lastState = self.state;
+                self.state = PaperFoldStateLeftUnfolded;
+                x = self.leftFoldView.frame.size.width;
             }
-        }
-        else
-        {
-            [self.contentView setTransform:CGAffineTransformMakeTranslation(0, 0)];
-            [self.leftFoldView unfoldWithParentOffset:-1*x];
-            self.state = PaperFoldStateDefault;
+            [self.contentView setTransform:CGAffineTransformMakeTranslation(x, 0)];
+            //[self.leftFoldView unfoldWithParentOffset:-1*x];
+            [self.leftFoldView unfoldWithParentOffset:x];
             
             if ([self.delegate respondsToSelector:@selector(paperFoldView:viewDidOffset:)])
             {
                 [self.delegate paperFoldView:self viewDidOffset:CGPointMake(x,0)];
             }
+        }
+    }
+    else
+    {
+        [self.contentView setTransform:CGAffineTransformMakeTranslation(0, 0)];
+        [self.leftFoldView unfoldWithParentOffset:-1*x];
+        self.state = PaperFoldStateDefault;
+        
+        if ([self.delegate respondsToSelector:@selector(paperFoldView:viewDidOffset:)])
+        {
+            [self.delegate paperFoldView:self viewDidOffset:CGPointMake(x,0)];
         }
     }
 }
@@ -293,32 +268,29 @@
 // restore contentView back to original position
 - (void)restoreView:(NSTimer*)timer
 {
-    if (self.paperFoldInitialPanDirection==PaperFoldInitialPanDirectionHorizontal)
+    CGAffineTransform transform = [self.contentView transform];
+    // restoring the x position 3/4 of the last x translation
+    float x = transform.tx/4*3;
+    transform = CGAffineTransformMakeTranslation(x, 0);
+    [self.contentView setTransform:transform];
+    
+    // if -5<x<5, stop timer animation
+    if ((x>=0 && x<5) || (x<=0 && x>-5))
     {
-        CGAffineTransform transform = [self.contentView transform];
-        // restoring the x position 3/4 of the last x translation
-        float x = transform.tx/4*3;
-        transform = CGAffineTransformMakeTranslation(x, 0);
+        [timer invalidate];
+        transform = CGAffineTransformMakeTranslation(0, 0);
         [self.contentView setTransform:transform];
+        [self animateWithContentOffset:CGPointMake(0, 0) panned:NO];
         
-        // if -5<x<5, stop timer animation
-        if ((x>=0 && x<5) || (x<=0 && x>-5))
-        {
-            [timer invalidate];
-            transform = CGAffineTransformMakeTranslation(0, 0);
-            [self.contentView setTransform:transform];
-            [self animateWithContentOffset:CGPointMake(0, 0) panned:NO];
-            
-			if (self.lastState != PaperFoldStateDefault) {
-				[self finishForState:PaperFoldStateDefault];
-			}
-			self.state = PaperFoldStateDefault;
+        if (self.lastState != PaperFoldStateDefault) {
+            [self finishForState:PaperFoldStateDefault];
         }
-        else
-        {
-            // use the x value to animate folding
-            [self animateWithContentOffset:CGPointMake(self.contentView.frame.origin.x, 0) panned:NO];
-        }
+        self.state = PaperFoldStateDefault;
+    }
+    else
+    {
+        // use the x value to animate folding
+        [self animateWithContentOffset:CGPointMake(self.contentView.frame.origin.x, 0) panned:NO];
     }
 }
 
