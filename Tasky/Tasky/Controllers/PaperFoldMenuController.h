@@ -53,7 +53,6 @@
  */
 @property (nonatomic, assign) NSUInteger selectedIndex;
 @property (nonatomic, assign, readonly) float menuWidth;
-@property (nonatomic, assign, readonly) int numberOfFolds;
 /**
  * This method initialize the view controller with 
  * the width of the menu table view on the left

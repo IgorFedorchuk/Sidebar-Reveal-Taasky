@@ -51,16 +51,6 @@
     return _viewDidLoadBlocks;
 }
 
-+ (BOOL)automaticallyNotifiesObserversOfSelectedViewController
-{
-    return NO;
-}
-
-+ (NSSet *)keyPathsForValuesAffectingSelectedViewController
-{
-    return [NSSet setWithObjects:@"selectedIndex", nil];
-}
-
 - (UIViewController *)selectedViewController
 {
     if (self.selectedIndex == NSNotFound)
@@ -84,10 +74,6 @@
     }
     
     self.selectedIndex = theSelectedIndex;
-}
-
-+ (BOOL)automaticallyNotifiesObserversOfSelectedIndex {
-    return NO;
 }
 
 - (void)setSelectedIndex:(NSUInteger)theSelectedIndex
@@ -210,7 +196,8 @@
     [self.paperFoldView.leftFoldView addSubview:menuTableViewSideShadowView];
     self.menuTableViewSideShadowView = menuTableViewSideShadowView;
     
-    for (void (^theBlock)(void) in self.viewDidLoadBlocks) {
+    for (void (^theBlock)(void) in self.viewDidLoadBlocks)
+    {
         theBlock();
     }
     self.viewDidLoadBlocks = nil;
