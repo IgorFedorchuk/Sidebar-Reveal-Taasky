@@ -35,6 +35,7 @@
 #import "FoldView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIView+Screenshot.h"
+#import "ShadowView.h"
 
 @implementation FoldView
 
@@ -63,7 +64,6 @@
             // set anchor point of the rightView to the right edge
             
             _rightView = [[FacingView alloc] initWithFrame:CGRectMake(-1*frame.size.width/2,0,frame.size.width, frame.size.height)];
-            //_rightView = [[FacingView alloc] initWithFrame:CGRectMake(-1*frame.size.width/4,0,frame.size.width/2,frame.size.height)];
             [_rightView setBackgroundColor:[UIColor colorWithWhite:0.99 alpha:1]];
             [_rightView.layer setAnchorPoint:CGPointMake(1.0, 0.5)];
             [self addSubview:_rightView];

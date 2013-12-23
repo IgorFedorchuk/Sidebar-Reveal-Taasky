@@ -33,7 +33,6 @@
 
 
 #import <UIKit/UIKit.h>
-#import "FacingView.h"
 #import "FoldView.h"
 #import "MultiFoldView.h"
 #import "TouchThroughUIView.h"
