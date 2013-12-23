@@ -291,7 +291,7 @@
             if (self.foldDirection==FoldDirectionHorizontalLeftToRight) {
                 [nextFoldView setFrame:CGRectMake(foldView.frame.origin.x - 2*nextFoldView.rightView.frame.size.width,0,nextFoldView.frame.size.width,nextFoldView.frame.size.height)];
             } else {
-                [nextFoldView setFrame:CGRectMake(foldView.frame.origin.x + 2*foldView.leftView.frame.size.width,0,nextFoldView.frame.size.width,nextFoldView.frame.size.height)];
+                //[nextFoldView setFrame:CGRectMake(foldView.frame.origin.x + 2*foldView.leftView.frame.size.width,0,nextFoldView.frame.size.width,nextFoldView.frame.size.height)];
             }
             
             float foldWidth = self.frame.size.width/self.numberOfFolds;
@@ -314,7 +314,7 @@
                 //x = displacement - x;
                 
             } else{
-                x = displacement+foldView.frame.origin.x+2*foldView.leftView.frame.size.width;
+               // x = displacement+foldView.frame.origin.x+2*foldView.leftView.frame.size.width;
                 //x = self.superview.frame.origin.x+foldView.frame.origin.x+2*foldView.leftView.frame.size.width;
             }
             
@@ -346,68 +346,6 @@
             [self unfoldView:nextFoldView toFraction:adjustedFraction withOffset:foldView.frame.origin.x];
         }
     }
-    else if (self.foldDirection==FoldDirectionVertical)
-    {
-        // check if there is another subfold beside this fold
-        int index = [foldView tag] - FOLDVIEW_TAG;
-        
-        if (index < self.numberOfFolds-1)
-        {
-            FoldView *nextFoldView = (FoldView*)[self viewWithTag:FOLDVIEW_TAG+index+1];
-            // set the origin of the next foldView
-            [nextFoldView setFrame:CGRectMake(0,foldView.frame.origin.y - 2*foldView.bottomView.frame.size.height,nextFoldView.frame.size.width,nextFoldView.frame.size.height)];
-            
-            float foldHeight = self.frame.size.height/self.numberOfFolds;
-            // calculate the offset between the right edge of the last subfold, and the edge of the screen
-            // use this offset to readjust the fraction
-            float displacement = 0.0;
-            if ([self.delegate respondsToSelector:@selector(displacementOfMultiFoldView:)])
-            {
-                displacement = [self.delegate displacementOfMultiFoldView:self];
-            }
-            else
-            {
-                if ([self.superview isKindOfClass:[UIScrollView class]])
-                {
-                    displacement = -1*[(UIScrollView*)self.superview contentOffset].y;
-                }
-                else
-                {
-                    displacement = self.superview.frame.origin.y ;
-                }
-            }
-            float y = displacement - 2*foldView.bottomView.frame.size.height;
-            int _index = index - 1;
-            while (_index>=0)
-            {
-                FoldView *prevFoldView = (FoldView*)[self viewWithTag:FOLDVIEW_TAG+_index];
-                y -= 2*prevFoldView.bottomView.frame.size.height;
-                _index -= 1;
-            }
-
-            CGFloat adjustedFraction = 0;
-            if (index+1==self.numberOfFolds-1)
-            {
-                // if this is the last fold, do not use the pull factor
-                // so that the right edge of this subfold aligns with the right edge of the screen
-                adjustedFraction = y/(foldHeight);
-            }
-            else
-            {
-                // if this is not the last fold, use the pull factor
-                adjustedFraction = y/(foldHeight+self.pullFactor*foldHeight);
-            }
-
-            if (adjustedFraction < 0) adjustedFraction = 0;
-            if (adjustedFraction > 1) adjustedFraction = 1;
-            // unfold this foldView with the fraction
-            // by calling the same function
-            
-            // this drills in to the next subfold in a cascading effect depending on the number of available folds
-            [self unfoldView:nextFoldView toFraction:adjustedFraction withOffset:0];
-        }
-    }
-    
 }
 
 // hide fold (when content view is visible) and show fold (when content view is hidden

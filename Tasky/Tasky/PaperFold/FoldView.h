@@ -39,10 +39,7 @@
 @interface FoldView : UIView
 
 // each folderView consists of 2 facing views: leftView and rightView
-@property (nonatomic) FacingView *leftView, *rightView;
-// or topView and bottomView
-@property (nonatomic) FacingView *topView, *bottomView;
-
+@property (nonatomic) FacingView *rightView;
 
 // indicate whether the fold is open or closed
 @property (nonatomic, assign) FoldState state;
