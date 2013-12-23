@@ -56,8 +56,6 @@ typedef void (^CompletionBlock)();
 @property (nonatomic, strong) NSTimer *animationTimer;
 // the fold view on the left
 @property (nonatomic, strong) MultiFoldView *leftFoldView;
-// the multiple fold view on the right
-@property (nonatomic, strong) MultiFoldView *rightFoldView;
 // state of the current fold
 @property (nonatomic, assign) PaperFoldState state, lastState;
 // enable and disable dragging

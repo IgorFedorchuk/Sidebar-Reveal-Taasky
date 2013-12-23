@@ -100,10 +100,6 @@
     CGRect leftFoldViewFrame = self.leftFoldView.frame;
     leftFoldViewFrame.size.height = frame.size.height;
     [self.leftFoldView setFrame:leftFoldViewFrame];
-    
-    CGRect rightFoldViewFrame = self.rightFoldView.frame;
-    rightFoldViewFrame.size.height = frame.size.height;
-    [self.rightFoldView setFrame:rightFoldViewFrame];
 }
 
 - (void)setCenterContentView:(UIView*)view
@@ -179,7 +175,6 @@
 
 - (void)onContentViewPannedHorizontally:(UIPanGestureRecognizer*)gesture
 {
-    [self.rightFoldView setHidden:NO];
     [self.leftFoldView setHidden:NO];
 
     CGPoint point = [gesture translationInView:self];
@@ -193,11 +188,6 @@
         else if (_state==PaperFoldStateLeftUnfolded)
         {
             CGPoint adjustedPoint = CGPointMake(point.x + self.leftFoldView.frame.size.width, point.y);
-            [self animateWithContentOffset:adjustedPoint panned:YES];
-        }
-        else if (_state==PaperFoldStateRightUnfolded)
-        {
-            CGPoint adjustedPoint = CGPointMake(point.x - self.rightFoldView.frame.size.width, point.y);
             [self animateWithContentOffset:adjustedPoint panned:YES];
         }
     }
@@ -260,36 +250,10 @@
                 }
             }
         }
-        else if (x<0.0)
-        {
-            if (self.enableRightFoldDragging || !panned)
-            {
-                // set the limit of the left offset
-                // original x value not changed, to be sent to multi-fold view
-                float x1 = x;
-                if (x1<=-self.rightFoldView.frame.size.width)
-                {
-					if (self.lastState != PaperFoldStateRightUnfolded) {
-						[self finishForState:PaperFoldStateRightUnfolded];
-					}
-                    self.lastState = self.state;
-                    self.state = PaperFoldStateRightUnfolded;
-                    x1 = -self.rightFoldView.frame.size.width;
-                }
-                [self.contentView setTransform:CGAffineTransformMakeTranslation(x1, 0)];
-                [self.rightFoldView unfoldWithParentOffset:x];
-                
-                if ([self.delegate respondsToSelector:@selector(paperFoldView:viewDidOffset:)])
-                {
-                    [self.delegate paperFoldView:self viewDidOffset:CGPointMake(x,0)];
-                }
-            }
-        }
         else
         {
             [self.contentView setTransform:CGAffineTransformMakeTranslation(0, 0)];
             [self.leftFoldView unfoldWithParentOffset:-1*x];
-            [self.rightFoldView unfoldWithParentOffset:x];
             self.state = PaperFoldStateDefault;
             
             if ([self.delegate respondsToSelector:@selector(paperFoldView:viewDidOffset:)])
@@ -304,7 +268,6 @@
 - (void)unfoldLeftView:(NSTimer*)timer
 {
     [self.leftFoldView setHidden:NO];
-    [self.rightFoldView setHidden:NO];
     
     CGAffineTransform transform = [self.contentView transform];
     float x = transform.tx + (self.leftFoldView.frame.size.width-transform.tx)/4;
@@ -368,7 +331,6 @@
     else
     {
         [self.leftFoldView setHidden:YES];
-        [self.rightFoldView setHidden:YES];
         
         if (state==PaperFoldStateDefault)
         {
@@ -391,18 +353,7 @@
 				[self finishForState:PaperFoldStateLeftUnfolded];
 			}
         }
-        else if (state==PaperFoldStateRightUnfolded)
-        {
-            [self.rightFoldView setHidden:NO];
-            
-            CGAffineTransform transform = CGAffineTransformMakeTranslation(-self.rightFoldView.frame.size.width, 0);
-            [self.contentView setTransform:transform];
-            [self.rightFoldView unfoldWithoutAnimation];
-            
-			if (self.lastState != PaperFoldStateRightUnfolded) {
-				[self finishForState:PaperFoldStateRightUnfolded];
-			}
-        }
+        
         self.state = state;
     }
 }
@@ -474,11 +425,7 @@
 
 - (CGFloat)displacementOfMultiFoldView:(id)multiFoldView
 {
-    if (multiFoldView==self.rightFoldView)
-    {
-        return [self.contentView frame].origin.x;
-    }
-    else if (multiFoldView==self.leftFoldView)
+    if (multiFoldView==self.leftFoldView)
     {
         return -1*[self.contentView frame].origin.x;
     }
