@@ -62,8 +62,6 @@
 
 // init with the number of folds and pull factor
 
-// defaults to horizontal fold
-- (id)initWithFrame:(CGRect)frame folds:(int)folds pullFactor:(float)pullFactor;
 - (id)initWithFrame:(CGRect)frame foldDirection:(FoldDirection)foldDirection folds:(int)folds pullFactor:(float)pullFactor;
 
 // set the content of the view

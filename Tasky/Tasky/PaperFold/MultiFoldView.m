@@ -55,22 +55,14 @@
         // create multiple FoldView next to each other
         for (int i=0; i<_numberOfFolds; i++)
         {
-            if (_foldDirection==FoldDirectionHorizontalLeftToRight || _foldDirection==FoldDirectionHorizontalRightToLeft)
-            {
-                float foldWidth = frame.size.width/self.numberOfFolds;
-                FoldView *foldView = [[FoldView alloc] initWithFrame:CGRectMake(foldWidth*i,0,foldWidth,frame.size.height)];
-                [foldView setTag:FOLDVIEW_TAG+i];
-                [self addSubview:foldView];
-            }
+            float foldWidth = frame.size.width/self.numberOfFolds;
+            FoldView *foldView = [[FoldView alloc] initWithFrame:CGRectMake(foldWidth*i,0,foldWidth,frame.size.height)];
+            [foldView setTag:FOLDVIEW_TAG+i];
+            [self addSubview:foldView];
         }
         [self setAutoresizesSubviews:YES];
     }
     return self;
-}
-
-- (id)initWithFrame:(CGRect)frame folds:(int)folds pullFactor:(float)factor
-{
-    return [self initWithFrame:frame foldDirection:FoldDirectionHorizontalRightToLeft folds:folds pullFactor:factor];
 }
 
 - (void)setContent:(UIView *)contentView
@@ -98,30 +90,27 @@
 
 - (void)setScreenshotImage:(UIImage*)image
 {
-    if (self.foldDirection==FoldDirectionHorizontalLeftToRight || self.foldDirection==FoldDirectionHorizontalRightToLeft)
+    float foldWidth = image.size.width/self.numberOfFolds;
+    
+    for (int i=0; i<self.numberOfFolds; i++)
     {
-        float foldWidth = image.size.width/self.numberOfFolds;
-        
-        for (int i=0; i<self.numberOfFolds; i++)
+        CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], CGRectMake(foldWidth*i*image.scale, 0, foldWidth*image.scale, image.size.height*image.scale));
+        if (imageRef)
         {
-            CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], CGRectMake(foldWidth*i*image.scale, 0, foldWidth*image.scale, image.size.height*image.scale));
-            if (imageRef)
+            UIImage *croppedImage = [UIImage imageWithCGImage:imageRef];
+            CFRelease(imageRef);
+            FoldView *foldView = nil;
+            if (self.foldDirection==FoldDirectionHorizontalLeftToRight)
             {
-                UIImage *croppedImage = [UIImage imageWithCGImage:imageRef];
-                CFRelease(imageRef);
-                FoldView *foldView = nil;
-                if (self.foldDirection==FoldDirectionHorizontalLeftToRight)
-                {
-                    foldView = (FoldView*)[self viewWithTag:FOLDVIEW_TAG + (self.numberOfFolds - 1) - i];
-                }
-                else
-                {
-                    foldView = (FoldView*)[self viewWithTag:FOLDVIEW_TAG+i];
-                }
-                [foldView setImage:croppedImage];
+                foldView = (FoldView*)[self viewWithTag:FOLDVIEW_TAG + (self.numberOfFolds - 1) - i];
             }
-            
+            else
+            {
+                foldView = (FoldView*)[self viewWithTag:FOLDVIEW_TAG+i];
+            }
+            [foldView setImage:croppedImage];
         }
+        
     }
 }
 
@@ -129,13 +118,10 @@
 - (void)calculateFoldStateFromOffset:(float)offset
 {
     CGFloat fraction = 0.0;
-    if (self.foldDirection==FoldDirectionHorizontalRightToLeft || self.foldDirection==FoldDirectionHorizontalLeftToRight)
-    {
-        if (offset < 0)
-            fraction = -1*offset/self.frame.size.width;
-        else
-            fraction = offset/self.frame.size.width;
-    }
+    if (offset < 0)
+        fraction = -1*offset/self.frame.size.width;
+    else
+        fraction = offset/self.frame.size.width;
 
     if (_state==FoldStateClosed && fraction>0)
     {
@@ -167,21 +153,18 @@
 {
     [self calculateFoldStateFromOffset:offset];
     
-    if (self.foldDirection==FoldDirectionHorizontalRightToLeft || self.foldDirection==FoldDirectionHorizontalLeftToRight)
+    float foldWidth = self.frame.size.width/self.numberOfFolds;
+    CGFloat fraction;
+    
+    if (offset > (foldWidth+self.pullFactor*foldWidth))
     {
-        float foldWidth = self.frame.size.width/self.numberOfFolds;
-        CGFloat fraction;
-        
-        if (offset > (foldWidth+self.pullFactor*foldWidth))
-        {
-            offset = (foldWidth+self.pullFactor*foldWidth);
-        }
-        fraction = offset /(foldWidth+self.pullFactor*foldWidth);
-        
-        if (fraction < 0) fraction  = -1*fraction;//0;
-        if (fraction > 1) fraction = 1;
-        [self unfoldViewToFraction:fraction];
+        offset = (foldWidth+self.pullFactor*foldWidth);
     }
+    fraction = offset /(foldWidth+self.pullFactor*foldWidth);
+    
+    if (fraction < 0) fraction  = -1*fraction;//0;
+    if (fraction > 1) fraction = 1;
+    [self unfoldViewToFraction:fraction];
 }
 
 - (void)unfoldViewToFraction:(CGFloat)fraction
@@ -210,66 +193,63 @@
 {
     [foldView unfoldViewToFraction:fraction offset:offset];
     
-    if (self.foldDirection==FoldDirectionHorizontalLeftToRight || self.foldDirection==FoldDirectionHorizontalRightToLeft)
+    if (self.foldDirection==FoldDirectionHorizontalLeftToRight)
     {
+        [foldView setFrame:CGRectMake(offset - 2*foldView.rightView.frame.size.width, 0, foldView.frame.size.width, foldView.frame.size.height)];
+    }
+    
+    // check if there is another subfold beside this fold
+    int index = [foldView tag] - FOLDVIEW_TAG;
+    if (index < self.numberOfFolds-1)
+    {
+        FoldView *nextFoldView = (FoldView*)[self viewWithTag:FOLDVIEW_TAG+index+1];
+        // set the origin of the next foldView
+        // set the origin of the next foldView
         if (self.foldDirection==FoldDirectionHorizontalLeftToRight)
         {
-            [foldView setFrame:CGRectMake(offset - 2*foldView.rightView.frame.size.width, 0, foldView.frame.size.width, foldView.frame.size.height)];
+            [nextFoldView setFrame:CGRectMake(foldView.frame.origin.x - 2*nextFoldView.rightView.frame.size.width,0,nextFoldView.frame.size.width,nextFoldView.frame.size.height)];
         }
         
-        // check if there is another subfold beside this fold
-        int index = [foldView tag] - FOLDVIEW_TAG;
-        if (index < self.numberOfFolds-1)
+        float foldWidth = self.frame.size.width/self.numberOfFolds;
+        // calculate the offset between the right edge of the last subfold, and the edge of the screen
+        // use this offset to readjust the fraction
+        float displacement = 0.0;
+        if ([self.delegate respondsToSelector:@selector(displacementOfMultiFoldView:)])
         {
-            FoldView *nextFoldView = (FoldView*)[self viewWithTag:FOLDVIEW_TAG+index+1];
-            // set the origin of the next foldView
-            // set the origin of the next foldView
-            if (self.foldDirection==FoldDirectionHorizontalLeftToRight)
-            {
-                [nextFoldView setFrame:CGRectMake(foldView.frame.origin.x - 2*nextFoldView.rightView.frame.size.width,0,nextFoldView.frame.size.width,nextFoldView.frame.size.height)];
-            }
-            
-            float foldWidth = self.frame.size.width/self.numberOfFolds;
-            // calculate the offset between the right edge of the last subfold, and the edge of the screen
-            // use this offset to readjust the fraction
-            float displacement = 0.0;
-            if ([self.delegate respondsToSelector:@selector(displacementOfMultiFoldView:)])
-            {
-                displacement = [self.delegate displacementOfMultiFoldView:self];
-            }
-            else
-            {
-                displacement = self.superview.frame.origin.x;
-            }
-            
-            float x;
-            if (self.foldDirection==FoldDirectionHorizontalLeftToRight)
-            {
-                x =  (foldView.frame.origin.x + (fraction * foldView.frame.size.width)) - 2*foldView.rightView.frame.size.width;
-                
-            }
-            
-            CGFloat adjustedFraction = 0;
-            if (self.foldDirection==FoldDirectionHorizontalLeftToRight)
-            {
-                x = -x;
-            }
-            if (index+1==self.numberOfFolds-1)
-            {
-                // if this is the last fold, do not use the pull factor
-                // so that the right edge of this subfold aligns with the right edge of the screen
-                adjustedFraction = (-1*x)/(foldWidth);
-            }
-            else
-            {
-                // if this is not the last fold, use the pull factor
-                adjustedFraction = (-1*x)/(foldWidth+self.pullFactor*foldWidth);
-            }
-            if (adjustedFraction < 0) adjustedFraction = 0;
-            if (adjustedFraction > 1) adjustedFraction = 1;
-          
-            [self unfoldView:nextFoldView toFraction:adjustedFraction withOffset:foldView.frame.origin.x];
+            displacement = [self.delegate displacementOfMultiFoldView:self];
         }
+        else
+        {
+            displacement = self.superview.frame.origin.x;
+        }
+        
+        float x;
+        if (self.foldDirection==FoldDirectionHorizontalLeftToRight)
+        {
+            x =  (foldView.frame.origin.x + (fraction * foldView.frame.size.width)) - 2*foldView.rightView.frame.size.width;
+            
+        }
+        
+        CGFloat adjustedFraction = 0;
+        if (self.foldDirection==FoldDirectionHorizontalLeftToRight)
+        {
+            x = -x;
+        }
+        if (index+1==self.numberOfFolds-1)
+        {
+            // if this is the last fold, do not use the pull factor
+            // so that the right edge of this subfold aligns with the right edge of the screen
+            adjustedFraction = (-1*x)/(foldWidth);
+        }
+        else
+        {
+            // if this is not the last fold, use the pull factor
+            adjustedFraction = (-1*x)/(foldWidth+self.pullFactor*foldWidth);
+        }
+        if (adjustedFraction < 0) adjustedFraction = 0;
+        if (adjustedFraction > 1) adjustedFraction = 1;
+      
+        [self unfoldView:nextFoldView toFraction:adjustedFraction withOffset:foldView.frame.origin.x];
     }
 }
 
