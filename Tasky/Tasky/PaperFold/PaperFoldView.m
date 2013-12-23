@@ -45,7 +45,6 @@
 @property (nonatomic, assign) BOOL showDividerLines;
 
 - (void)onContentViewPannedHorizontally:(UIPanGestureRecognizer*)gesture;
-- (void)onContentViewPannedVertically:(UIPanGestureRecognizer*)gesture;
 @end
 
 @implementation PaperFoldView
@@ -169,35 +168,12 @@
         {
             [self onContentViewPannedHorizontally:gesture];
         }
-        else
+        
+		if (gesture.state != UIGestureRecognizerStateChanged)
         {
-            [self onContentViewPannedVertically:gesture];
-        }
-		
-		if (gesture.state != UIGestureRecognizerStateChanged) {
 			// hide the divider line
 			[self setShowDividerLines:NO animated:YES];
 		}
-    }
-}
-
-- (void)onContentViewPannedVertically:(UIPanGestureRecognizer*)gesture
-{
-    [self.rightFoldView setHidden:YES];
-    [self.leftFoldView setHidden:YES];
-    
-    CGPoint point = [gesture translationInView:self];
-    if ([gesture state]==UIGestureRecognizerStateChanged)
-    {
-        if (_state==PaperFoldStateDefault)
-        {
-            // animate folding when panned
-            [self animateWithContentOffset:point panned:YES];
-        }
-    }
-    else if ([gesture state]==UIGestureRecognizerStateEnded || [gesture state]==UIGestureRecognizerStateCancelled)
-    {
-        self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(restoreView:) userInfo:nil repeats:YES];
     }
 }
 
