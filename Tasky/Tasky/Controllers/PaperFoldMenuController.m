@@ -187,7 +187,7 @@
     menuTableView.scrollsToTop = !(self.paperFoldView.state == PaperFoldStateDefault);
     self.menuTableView = menuTableView;
     
-    ShadowView *menuTableViewSideShadowView = [[ShadowView alloc] initWithFrame:CGRectMake(_menuTableView.frame.size.width-2,0,2,[self.view bounds].size.height) foldDirection:FoldDirectionHorizontalLeftToRight];
+    ShadowView *menuTableViewSideShadowView = [[ShadowView alloc] initWithFrame:CGRectMake(_menuTableView.frame.size.width-2,0,2,[self.view bounds].size.height)];
     [menuTableViewSideShadowView setColorArrays:@[[UIColor clearColor],[UIColor colorWithWhite:0 alpha:0.2]]];
     /**
      * added to the leftFoldView instead of leftFoldView.contentView bec

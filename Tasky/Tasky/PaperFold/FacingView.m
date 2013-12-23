@@ -40,7 +40,7 @@
 {
     if (self = [super initWithFrame:frame])
     {
-        _shadowView = [[ShadowView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height) foldDirection:foldDirection];
+        _shadowView = [[ShadowView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
         [self addSubview:_shadowView];
         [_shadowView setBackgroundColor:[UIColor clearColor]];
     }

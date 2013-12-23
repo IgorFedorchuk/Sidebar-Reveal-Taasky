@@ -37,7 +37,6 @@
 
 @interface ShadowView : UIView
 
-- (id)initWithFrame:(CGRect)frame foldDirection:(FoldDirection)foldDirection;
 - (void)setColorArrays:(NSArray*)colors;
 
 @end

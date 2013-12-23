@@ -44,7 +44,7 @@
 
 @implementation ShadowView
 
-- (id)initWithFrame:(CGRect)frame foldDirection:(FoldDirection)foldDirection
+- (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self)
@@ -57,11 +57,6 @@
 		[self setBackgroundColor:[UIColor clearColor]];
     }
     return self;
-}
-
-- (id)initWithFrame:(CGRect)frame
-{
-    return [self initWithFrame:frame foldDirection:FoldDirectionHorizontalRightToLeft];
 }
 
 - (void)setColorArrays:(NSArray*)colors
