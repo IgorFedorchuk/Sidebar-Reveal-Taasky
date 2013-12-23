@@ -21,7 +21,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    _menuController = [[DemoMenuController alloc] initWithMenuWidth:80 numberOfFolds:1];
+    _menuController = [[DemoMenuController alloc] initWithMenuWidth:80];
     [self.window setRootViewController:_menuController];
     
     NSMutableArray *viewControllers = [NSMutableArray array];

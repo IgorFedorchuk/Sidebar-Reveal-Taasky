@@ -34,24 +34,18 @@
 #import "PaperFoldMenuController.h"
 
 @interface PaperFoldMenuController ()
-/**
- * A UIView with shadow at joint between the menu and content view
- */
+
 @property (nonatomic, assign) float menuWidth;
-@property (nonatomic, assign) int numberOfFolds;
 @property (nonatomic, strong) NSMutableArray *viewDidLoadBlocks;
-/**
- * This method reloads the menu on the left
- * and refresh the screenshot of the menu used in 
- * PaperFold
- */
-- (void)reloadMenu;
+
 @end
 
 @implementation PaperFoldMenuController
 
-- (NSMutableArray *)viewDidLoadBlocks {
-    if (_viewDidLoadBlocks == nil) {
+- (NSMutableArray *)viewDidLoadBlocks
+{
+    if (_viewDidLoadBlocks == nil)
+    {
         self.viewDidLoadBlocks = [[NSMutableArray alloc] init];
     }
     return _viewDidLoadBlocks;
@@ -152,33 +146,32 @@
     }
 }
 
-- (void)commonInit {
+- (void)commonInit
+{
     _selectedIndex = NSNotFound;
 }
 
-- (id)initWithMenuWidth:(float)menuWidth numberOfFolds:(int)numberOfFolds
+- (id)initWithMenuWidth:(float)menuWidth
 {
-    self = [self initWithNibName:nil bundle:nil];
-    if (self)
+    if (self = [self initWithNibName:nil bundle:nil])
     {
         self.menuWidth = menuWidth;
-        self.numberOfFolds = numberOfFolds;
     }
     return self;
 }
 
-- (id)initWithNibName:(NSString *)theNibNameOrNil bundle:(NSBundle *)theNibBundleOrNil {
-    self = [super initWithNibName:theNibNameOrNil bundle:theNibBundleOrNil];
-    if (self)
+- (id)initWithNibName:(NSString *)theNibNameOrNil bundle:(NSBundle *)theNibBundleOrNil
+{
+    if (self = [super initWithNibName:theNibNameOrNil bundle:theNibBundleOrNil])
     {
         [self commonInit];
     }
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
-    if (self)
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder])
     {
         [self commonInit];
     }
@@ -202,7 +195,7 @@
     self.contentView = contentView;
     
     UITableView *menuTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.menuWidth, [self.view bounds].size.height)];
-    [self.paperFoldView setLeftFoldContentView:menuTableView foldCount:self.numberOfFolds pullFactor:0.9];
+    [self.paperFoldView setLeftFoldContentView:menuTableView foldCount:1 pullFactor:0.9];
     [menuTableView setDelegate:self];
     [menuTableView setDataSource:self];
     menuTableView.scrollsToTop = !(self.paperFoldView.state == PaperFoldStateDefault);
