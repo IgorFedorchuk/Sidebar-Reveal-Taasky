@@ -197,8 +197,6 @@
 - (void)animateWithContentOffset:(CGPoint)point panned:(BOOL)panned
 {
     float x = point.x;
-    // if offset to the right, show the left view
-    // if offset to the left, show the right multi-fold view
     
     if (self.state!=self.lastState) self.lastState = self.state;
     
@@ -248,17 +246,11 @@
     float x = transform.tx + (self.leftFoldView.frame.size.width-transform.tx)/4;
     transform = CGAffineTransformMakeTranslation(x, 0);
     [self.contentView setTransform:transform];
-    if (x>=self.leftFoldView.frame.size.width-2)
+    if (x >= self.leftFoldView.frame.size.width - 2)
     {
         [timer invalidate];
         transform = CGAffineTransformMakeTranslation(self.leftFoldView.frame.size.width, 0);
         [self.contentView setTransform:transform];
-        
-        //        if (self.lastState!=PaperFoldStateLeftUnfolded && [self.delegate respondsToSelector:@selector(paperFoldView:didFoldAutomatically:toState:)])
-        //        {
-        //            [self.delegate paperFoldView:self didFoldAutomatically:self.isAutomatedFolding toState:PaperFoldStateLeftUnfolded];
-        //        }
-        //        [self setIsAutomatedFolding:NO];
     }
     
     // use the x value to animate folding
@@ -414,23 +406,22 @@
         CGPoint location = [gestureRecognizer locationInView:self.contentView];
         if (location.x < kEdgeScrollWidth || location.x > (self.contentView.frame.size.width-kEdgeScrollWidth))
         {
-            
             return NO;
         }
-        else return YES;
+        return YES;
     }
-    else return NO;
+    return NO;
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
 	// only allow panning if we didn't restrict it to start at a certain rect
 	if (NO == CGRectIsNull(self.restrictedDraggingRect)
-		&& NO == CGRectContainsPoint(self.restrictedDraggingRect, [gestureRecognizer locationInView:self])) {
+		&& NO == CGRectContainsPoint(self.restrictedDraggingRect, [gestureRecognizer locationInView:self]))
+    {
 		return NO;
-	} else {
-		return YES;
 	}
+    return YES;
 }
 
 @end
