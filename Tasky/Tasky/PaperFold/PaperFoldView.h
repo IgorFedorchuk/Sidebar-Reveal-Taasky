@@ -54,14 +54,10 @@ typedef void (^CompletionBlock)();
 // timer to animate folds after gesture ended
 // manual animation with NSTimer is required to sync the offset of the contentView, with the folding of views
 @property (nonatomic, strong) NSTimer *animationTimer;
-// the fold view on the left and bottom
-@property (nonatomic, strong) FoldView *bottomFoldView;
 // the fold view on the left
 @property (nonatomic, strong) MultiFoldView *leftFoldView;
 // the multiple fold view on the right
 @property (nonatomic, strong) MultiFoldView *rightFoldView;
-// the multiple fold view on the top
-@property (nonatomic, strong) MultiFoldView *topFoldView;
 // state of the current fold
 @property (nonatomic, assign) PaperFoldState state, lastState;
 // enable and disable dragging
@@ -113,9 +109,7 @@ typedef void (^CompletionBlock)();
 // use setPaperFoldState: instead
 - (void)unfoldLeftView __attribute__((deprecated));
 - (void)unfoldRightView __attribute__((deprecated));
-- (void)restoreToCenter __attribute__((deprecated));
 // set fold views
-- (void)setLeftFoldContentView:(UIView*)view __attribute__((deprecated));
 - (void)setRightFoldContentView:(UIView*)view rightViewFoldCount:(int)rightViewFoldCount rightViewPullFactor:(float)rightViewPullFactor __attribute__((deprecated));;
 
 @end

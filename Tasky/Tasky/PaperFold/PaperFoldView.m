@@ -113,12 +113,6 @@
 	[self.contentView addSubview:view];
 }
 
-// this method is deprecated
-- (void)setLeftFoldContentView:(UIView*)view
-{
-    [self setLeftFoldContentView:view foldCount:1 pullFactor:0.9];
-}
-
 - (void)setLeftFoldContentView:(UIView*)view foldCount:(int)leftViewFoldCount pullFactor:(float)leftViewPullFactor
 {
     if (self.leftFoldView) [self.leftFoldView removeFromSuperview];
@@ -228,8 +222,6 @@
 {
     [self.rightFoldView setHidden:YES];
     [self.leftFoldView setHidden:YES];
-    [self.bottomFoldView setHidden:NO];
-    [self.topFoldView setHidden:NO];
     
     CGPoint point = [gesture translationInView:self];
     if ([gesture state]==UIGestureRecognizerStateChanged)
@@ -239,55 +231,10 @@
             // animate folding when panned
             [self animateWithContentOffset:point panned:YES];
         }
-        else if (_state==PaperFoldStateBottomUnfolded)
-        {
-            CGPoint adjustedPoint = CGPointMake(point.x, point.y - self.bottomFoldView.frame.size.height);
-            [self animateWithContentOffset:adjustedPoint panned:YES];
-        }
-        else if (_state==PaperFoldStateTopUnfolded)
-        {
-            CGPoint adjustedPoint = CGPointMake(point.x, point.y + self.topFoldView.frame.size.height);
-            [self animateWithContentOffset:adjustedPoint panned:YES];
-        }
-        
     }
     else if ([gesture state]==UIGestureRecognizerStateEnded || [gesture state]==UIGestureRecognizerStateCancelled)
     {
-        float y = point.y;
-        if (y<=0.0) // offset to the top
-        {
-            if ( (-y>=kBottomViewUnfoldThreshold*self.bottomFoldView.frame.size.height && _state==PaperFoldStateDefault) || -1*[self.contentView frame].origin.y==self.bottomFoldView.frame.size.height)
-            {
-                if (self.enableBottomFoldDragging)
-                {
-                    // if offset more than threshold, open fully
-                    self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(unfoldBottomView:) userInfo:nil repeats:YES];
-                    return;
-                }
-            }
-            
-        }
-        else if (y>0)
-        {
-            if ((y>=kTopViewUnfoldThreshold*self.topFoldView.frame.size.height && _state==PaperFoldStateDefault) || [self.contentView frame].origin.y==self.topFoldView.frame.size.height)
-            {
-                if (self.enableTopFoldDragging)
-                {
-                    // if offset more than threshold, open fully
-                    self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(unfoldTopView:) userInfo:nil repeats:YES];
-                    return;
-                }
-            }
-        }
-        
-        // after panning completes
-        // if offset does not exceed threshold
-        // use NSTimer to create manual animation to restore view
-        
-        //[self setPaperFoldState:PaperFoldStateDefault];
         self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(restoreView:) userInfo:nil repeats:YES];
-        
-
     }
 }
 
@@ -295,8 +242,6 @@
 {
     [self.rightFoldView setHidden:NO];
     [self.leftFoldView setHidden:NO];
-    [self.bottomFoldView setHidden:YES];
-    [self.topFoldView setHidden:YES];
 
     CGPoint point = [gesture translationInView:self];
     if ([gesture state]==UIGestureRecognizerStateChanged)
@@ -438,15 +383,7 @@
         {
             if (self.enableBottomFoldDragging || !panned)
             {
-                // set the limit of the top offset
-                if (-y>=self.bottomFoldView.frame.size.height)
-                {
-                    self.lastState = self.state;
-                    self.state = PaperFoldStateBottomUnfolded;
-                    y = -self.bottomFoldView.frame.size.height;
-                }
                 [self.contentView setTransform:CGAffineTransformMakeTranslation(0, y)];
-              //!!!!!  [self.bottomFoldView unfoldWithParentOffset:y];
                 
                 if ([self.delegate respondsToSelector:@selector(paperFoldView:viewDidOffset:)])
                 {
@@ -461,14 +398,8 @@
                 // set the limit of the bottom offset
                 // original y value not changed, to be sent to multi-fold view
                 float y1 = y;
-                if (y1>=self.topFoldView.frame.size.height)
-                {
-                    self.lastState = self.state;
-                    self.state = PaperFoldStateTopUnfolded;
-                    y1 = self.topFoldView.frame.size.height;
-                }
+                
                 [self.contentView setTransform:CGAffineTransformMakeTranslation(0, y1)];
-                [self.topFoldView unfoldWithParentOffset:y];
                 
                 if ([self.delegate respondsToSelector:@selector(paperFoldView:viewDidOffset:)])
                 {
@@ -480,8 +411,6 @@
         {
             
             [self.contentView setTransform:CGAffineTransformMakeTranslation(0, 0)];
-       //!!!!!!!     [self.bottomFoldView unfoldWithParentOffset:y];
-            [self.topFoldView unfoldWithParentOffset:y];
             self.state = PaperFoldStateDefault;
             
             if ([self.delegate respondsToSelector:@selector(paperFoldView:viewDidOffset:)])
@@ -493,38 +422,9 @@
     
 }
 
-- (void)unfoldBottomView:(NSTimer*)timer
-{
-    [self.topFoldView setHidden:NO];
-    [self.bottomFoldView setHidden:NO];
-    [self.leftFoldView setHidden:YES];
-    [self.rightFoldView setHidden:YES];
-    
-    CGAffineTransform transform = [self.contentView transform];
-    float y = transform.ty - (self.bottomFoldView.frame.size.height+transform.ty)/4;
-    transform = CGAffineTransformMakeTranslation(0, y);
-    [self.contentView setTransform:transform];
-  
-    if (-y>=self.bottomFoldView.frame.size.height-2)
-    {
-        [timer invalidate];
-        transform = CGAffineTransformMakeTranslation(0,-1*self.bottomFoldView.frame.size.height);
-        [self.contentView setTransform:transform];
-
-		if (self.lastState != PaperFoldStateBottomUnfolded) {
-			[self finishForState:PaperFoldStateBottomUnfolded];
-		}
-    }
-
-    // use the x value to animate folding
-    [self animateWithContentOffset:CGPointMake(0, self.contentView.frame.origin.y) panned:NO];
-}
-
 // unfold the left view
 - (void)unfoldLeftView:(NSTimer*)timer
 {
-    [self.topFoldView setHidden:YES];
-    [self.bottomFoldView setHidden:YES];
     [self.leftFoldView setHidden:NO];
     [self.rightFoldView setHidden:NO];
     
@@ -549,39 +449,9 @@
     [self animateWithContentOffset:CGPointMake(self.contentView.frame.origin.x, 0) panned:NO];
 }
 
-// unfold the top view
-- (void)unfoldTopView:(NSTimer*)timer
-{
-    [self.topFoldView setHidden:NO];
-    [self.bottomFoldView setHidden:NO];
-    [self.leftFoldView setHidden:YES];
-    [self.rightFoldView setHidden:YES];
-    
-    CGAffineTransform transform = [self.contentView transform];
-    float y = transform.ty + (self.topFoldView.frame.size.height-transform.ty)/8;
-    transform = CGAffineTransformMakeTranslation(0, y);
-    [self.contentView setTransform:transform];
-
-    if (y>=self.topFoldView.frame.size.height-5)
-    {
-        [timer invalidate];
-        transform = CGAffineTransformMakeTranslation(0,self.topFoldView.frame.size.height);
-        [self.contentView setTransform:transform];
-        
-		if (self.lastState != PaperFoldStateTopUnfolded) {
-			[self finishForState:PaperFoldStateTopUnfolded];
-		}
-    }
-    
-    // use the x value to animate folding
-    [self animateWithContentOffset:CGPointMake(0,self.contentView.frame.origin.y) panned:NO];
-}
-
 // unfold the right view
 - (void)unfoldRightView:(NSTimer*)timer
 {
-    [self.topFoldView setHidden:YES];
-    [self.bottomFoldView setHidden:YES];
     [self.leftFoldView setHidden:NO];
     [self.rightFoldView setHidden:NO];
     
@@ -669,8 +539,6 @@
     }
     else
     {
-        [self.topFoldView setHidden:YES];
-        [self.bottomFoldView setHidden:YES];
         [self.leftFoldView setHidden:YES];
         [self.rightFoldView setHidden:YES];
         
@@ -726,14 +594,6 @@
     {
         self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(unfoldRightView:) userInfo:nil repeats:YES];
     }
-    else if (state==PaperFoldStateTopUnfolded)
-    {
-        self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(unfoldTopView:) userInfo:nil repeats:YES];
-    }
-    else if (state==PaperFoldStateBottomUnfolded)
-    {
-        self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(unfoldBottomView:) userInfo:nil repeats:YES];
-    }
 }
 
 - (void)setPaperFoldState:(PaperFoldState)state
@@ -755,11 +615,6 @@
 	[self setPaperFoldState:PaperFoldStateRightUnfolded];
 }
 
-- (void)restoreToCenter
-{
-	[self setPaperFoldState:PaperFoldStateDefault];
-}
-
 - (void)finishForState:(PaperFoldState)state
 {
     [self setShowDividerLines:NO animated:YES];
@@ -777,13 +632,6 @@
 	
     // no more animations
     [self setIsAutomatedFolding:NO];
-}
-
-
-
-- (void)setShowDividerLines:(BOOL)showDividerLines
-{
-    [self setShowDividerLines:showDividerLines animated:NO];
 }
 
 - (void)setShowDividerLines:(BOOL)showDividerLines animated:(BOOL)animated
@@ -815,28 +663,7 @@
     {
         return -1*[self.contentView frame].origin.x;
     }
-    else if (multiFoldView==self.topFoldView)
-    {
-        if ([self.contentView isKindOfClass:[UIScrollView class]])
-        {
-            return -1*[(UIScrollView*)self.contentView contentOffset].y;
-        }
-        else
-        {
-            return self.contentView.frame.origin.y;
-        }
-    }
-    else if (multiFoldView==self.bottomFoldView)
-    {
-        if ([self.contentView isKindOfClass:[UIScrollView class]])
-        {
-            return -1*[(UIScrollView*)self.contentView contentOffset].y;
-        }
-        else
-        {
-            return self.contentView.frame.origin.y;
-        }
-    }
+    
     return 0.0;
 }
 
