@@ -40,11 +40,10 @@
 
 #define FOLDVIEW_TAG 1000
 
-- (id)initWithFrame:(CGRect)frame foldDirection:(FoldDirection)foldDirection folds:(int)folds pullFactor:(float)factor
+- (id)initWithFrame:(CGRect)frame folds:(int)folds pullFactor:(float)factor
 {
     if (self = [super initWithFrame:frame])
     {
-        _foldDirection = foldDirection;
         _numberOfFolds = folds;
         if (_numberOfFolds==1)
         {
@@ -99,15 +98,7 @@
         {
             UIImage *croppedImage = [UIImage imageWithCGImage:imageRef];
             CFRelease(imageRef);
-            FoldView *foldView = nil;
-            if (self.foldDirection==FoldDirectionHorizontalLeftToRight)
-            {
-                foldView = (FoldView*)[self viewWithTag:FOLDVIEW_TAG + (self.numberOfFolds - 1) - i];
-            }
-            else
-            {
-                foldView = (FoldView*)[self viewWithTag:FOLDVIEW_TAG+i];
-            }
+            FoldView *foldView = (FoldView*)[self viewWithTag:FOLDVIEW_TAG + (self.numberOfFolds - 1) - i];
             [foldView setImage:croppedImage];
         }
         
@@ -173,30 +164,24 @@
     // with the first foldView with index FOLDVIEW_TAG+0
     FoldView *firstFoldView = (FoldView*)[self viewWithTag:FOLDVIEW_TAG];
     
-    if (self.foldDirection==FoldDirectionHorizontalLeftToRight)
+    float offset = 0.0;
+    if ([self.delegate respondsToSelector:@selector(displacementOfMultiFoldView:)])
     {
-        float offset = 0.0;
-        if ([self.delegate respondsToSelector:@selector(displacementOfMultiFoldView:)])
-        {
-            offset = [self.delegate displacementOfMultiFoldView:self];
-        }
-        else
-        {
-            offset = self.superview.frame.origin.x;
-        }
-        if (offset<0) offset = -1*offset;
-        [self unfoldView:firstFoldView toFraction:fraction withOffset:offset];
+        offset = [self.delegate displacementOfMultiFoldView:self];
     }
+    else
+    {
+        offset = self.superview.frame.origin.x;
+    }
+    if (offset<0) offset = -1*offset;
+    [self unfoldView:firstFoldView toFraction:fraction withOffset:offset];
 }
 
 - (void)unfoldView:(FoldView*)foldView toFraction:(CGFloat)fraction withOffset:(float)offset
 {
     [foldView unfoldViewToFraction:fraction offset:offset];
     
-    if (self.foldDirection==FoldDirectionHorizontalLeftToRight)
-    {
-        [foldView setFrame:CGRectMake(offset - 2*foldView.rightView.frame.size.width, 0, foldView.frame.size.width, foldView.frame.size.height)];
-    }
+    [foldView setFrame:CGRectMake(offset - 2*foldView.rightView.frame.size.width, 0, foldView.frame.size.width, foldView.frame.size.height)];
     
     // check if there is another subfold beside this fold
     int index = [foldView tag] - FOLDVIEW_TAG;
@@ -205,10 +190,7 @@
         FoldView *nextFoldView = (FoldView*)[self viewWithTag:FOLDVIEW_TAG+index+1];
         // set the origin of the next foldView
         // set the origin of the next foldView
-        if (self.foldDirection==FoldDirectionHorizontalLeftToRight)
-        {
-            [nextFoldView setFrame:CGRectMake(foldView.frame.origin.x - 2*nextFoldView.rightView.frame.size.width,0,nextFoldView.frame.size.width,nextFoldView.frame.size.height)];
-        }
+        [nextFoldView setFrame:CGRectMake(foldView.frame.origin.x - 2*nextFoldView.rightView.frame.size.width,0,nextFoldView.frame.size.width,nextFoldView.frame.size.height)];
         
         float foldWidth = self.frame.size.width/self.numberOfFolds;
         // calculate the offset between the right edge of the last subfold, and the edge of the screen
@@ -224,17 +206,10 @@
         }
         
         float x;
-        if (self.foldDirection==FoldDirectionHorizontalLeftToRight)
-        {
             x =  (foldView.frame.origin.x + (fraction * foldView.frame.size.width)) - 2*foldView.rightView.frame.size.width;
-            
-        }
         
         CGFloat adjustedFraction = 0;
-        if (self.foldDirection==FoldDirectionHorizontalLeftToRight)
-        {
-            x = -x;
-        }
+        x = -x;
         if (index+1==self.numberOfFolds-1)
         {
             // if this is the last fold, do not use the pull factor

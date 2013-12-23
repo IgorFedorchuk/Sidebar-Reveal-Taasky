@@ -23,10 +23,6 @@ typedef enum
     FoldStateTransition = 2
 } FoldState;
 
-typedef enum
-{
-    FoldDirectionHorizontalLeftToRight = 1,
-} FoldDirection;
 
 typedef enum
 {

@@ -48,8 +48,6 @@
 @property (nonatomic, assign) float pullFactor;
 // indicate whether the fold is open or closed
 @property (nonatomic, assign) FoldState state;
-// fold direction
-@property (nonatomic, assign) FoldDirection foldDirection;
 // optimized screenshot follows the scale of the screen
 // non-optimized is always the non-retina image
 // take screenshot just before unfolding
@@ -62,7 +60,7 @@
 
 // init with the number of folds and pull factor
 
-- (id)initWithFrame:(CGRect)frame foldDirection:(FoldDirection)foldDirection folds:(int)folds pullFactor:(float)pullFactor;
+- (id)initWithFrame:(CGRect)frame folds:(int)folds pullFactor:(float)pullFactor;
 
 // set the content of the view
 - (void)setContent:(UIView *)contentView;
