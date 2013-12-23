@@ -5,7 +5,7 @@
 //  Created by honcheng on 26/10/12.
 //  Copyright (c) 2012 Hon Cheng Muh. All rights reserved.
 //
-//сирафимовича 6 кв 6
+//
 #import "DemoMenuController.h"
 
 @interface DemoMenuController ()
@@ -14,16 +14,8 @@
 
 @implementation DemoMenuController
 
-- (id)initWithMenuWidth:(float)menuWidth numberOfFolds:(int)numberOfFolds
+- (void)viewDidLoad
 {
-    self = [super initWithMenuWidth:menuWidth numberOfFolds:numberOfFolds];
-    if (self)
-    {
-    }
-    return self;
-}
-
-- (void)viewDidLoad {
     [super viewDidLoad];
     
     [self setOnlyAllowEdgeDrag:NO];
@@ -33,7 +25,7 @@
     [self.menuTableView setBackgroundView:tableBgView];
     [self.menuTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
-    [self performSelector:@selector(reloadMenu)];
+    [self reloadMenu];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -41,12 +33,9 @@
     return 50;
 }
 
-/**
- * Override the method to customize cells
- */
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (tableView==self.menuTableView)
+    if (tableView == self.menuTableView)
     {
         static NSString *identifier = @"identifier";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
@@ -67,14 +56,17 @@
         UIViewController *viewController = self.viewControllers[indexPath.row];
         [cell.textLabel setText:viewController.title];
         
-        if (indexPath.row==self.selectedIndex)
+        if (indexPath.row == self.selectedIndex)
         {
             [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
         }
         
         return cell;
     }
-    else return nil;
+    else
+    {
+        return nil;
+    }
 }
 
 
