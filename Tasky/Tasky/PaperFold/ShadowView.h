@@ -33,7 +33,6 @@
 
 
 #import <UIKit/UIKit.h>
-#import "PaperFoldConstants.h"
 
 @interface ShadowView : UIView
 

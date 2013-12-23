@@ -33,14 +33,11 @@
 
 
 #import <UIKit/UIKit.h>
-#import "PaperFoldConstants.h"
 @class ShadowView;
 
 @interface FacingView : UIView
 
 @property (nonatomic, strong) ShadowView *shadowView;
-
-- (id)initWithFrame:(CGRect)frame foldDirection:(FoldDirection)foldDirection;
 
 @end
 

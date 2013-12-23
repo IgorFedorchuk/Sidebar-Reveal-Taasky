@@ -36,6 +36,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIView+Screenshot.h"
 #import "ShadowView.h"
+#import "PaperFoldConstants.h"
 
 @interface FoldView ()
 

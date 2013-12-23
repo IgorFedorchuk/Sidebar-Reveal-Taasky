@@ -31,9 +31,10 @@
  *
  */
 
-@class MKMapView;
 #import <UIKit/UIKit.h>
 #import "FoldView.h"
+#import "PaperFoldConstants.h"
+@class MKMapView;
 
 @protocol MultiFoldViewDelegate <NSObject>
 - (CGFloat)displacementOfMultiFoldView:(id)multiFoldView;

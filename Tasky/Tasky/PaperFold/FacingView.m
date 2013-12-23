@@ -36,7 +36,7 @@
 
 @implementation FacingView
 
-- (id)initWithFrame:(CGRect)frame foldDirection:(FoldDirection)foldDirection
+- (id)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame])
     {
@@ -45,11 +45,6 @@
         [_shadowView setBackgroundColor:[UIColor clearColor]];
     }
     return self;
-}
-
-- (id)initWithFrame:(CGRect)frame
-{
-    return [self initWithFrame:frame foldDirection:FoldDirectionHorizontalRightToLeft];
 }
 
 @end
