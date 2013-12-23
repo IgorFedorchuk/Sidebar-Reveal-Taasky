@@ -65,13 +65,6 @@
                 [foldView setTag:FOLDVIEW_TAG+i];
                 [self addSubview:foldView];
             }
-            else if (_foldDirection==FoldDirectionVertical)
-            {
-                float foldHeight = frame.size.height/self.numberOfFolds;
-                FoldView *foldView = [[FoldView alloc] initWithFrame:CGRectMake(0,foldHeight*(self.numberOfFolds-i)-foldHeight,frame.size.width,foldHeight) foldDirection:foldDirection];
-                [foldView setTag:FOLDVIEW_TAG+i];
-                [self addSubview:foldView];
-            }
         }
         [self setAutoresizesSubviews:YES];
     }
@@ -143,21 +136,6 @@
             
         }
     }
-    else if (self.foldDirection==FoldDirectionVertical)
-    {
-        float foldHeight = image.size.height/self.numberOfFolds;
-        for (int i=0; i<self.numberOfFolds; i++)
-        {
-            CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], CGRectMake(0, foldHeight*(self.numberOfFolds-i-1)*image.scale, image.size.width*image.scale, foldHeight*image.scale));
-            if (imageRef)
-            {
-                UIImage *croppedImage = [UIImage imageWithCGImage:imageRef];
-                CFRelease(imageRef);
-                FoldView *foldView = (FoldView*)[self viewWithTag:FOLDVIEW_TAG+i];
-                [foldView setImage:croppedImage];
-            }
-        }
-    }
 }
 
 // set fold states based on offset value
@@ -170,10 +148,6 @@
             fraction = -1*offset/self.frame.size.width;
         else
             fraction = offset/self.frame.size.width;
-    }
-    else if (self.foldDirection==FoldDirectionVertical)
-    {
-        fraction = offset/self.frame.size.height;
     }
 
     if (_state==FoldStateClosed && fraction>0)
@@ -227,21 +201,6 @@
         
         if (fraction < 0) fraction  = -1*fraction;//0;
         if (fraction > 1) fraction = 1;
-        [self unfoldViewToFraction:fraction];
-    }
-    else if (self.foldDirection==FoldDirectionVertical)
-    {
-        float foldHeight = self.frame.size.height/self.numberOfFolds;
-        
-        if (offset>(foldHeight+self.pullFactor*foldHeight))
-        {
-            offset = (foldHeight+self.pullFactor*foldHeight);
-        }
-        
-        CGFloat fraction = offset /(foldHeight+self.pullFactor*foldHeight);
-        if (fraction < 0) fraction = -1*fraction;//0;
-        if (fraction > 1) fraction = 1;
-        
         [self unfoldViewToFraction:fraction];
     }
 }

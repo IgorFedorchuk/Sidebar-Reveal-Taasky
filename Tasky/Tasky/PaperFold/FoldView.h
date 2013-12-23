@@ -78,10 +78,5 @@
 // image gets spliced into 2, one for each folds
 - (void)setImage:(UIImage*)image;
 
-#pragma mark states
-- (void)foldDidOpened;
-- (void)foldDidClosed;
-- (void)foldWillOpen;
-- (void)foldWillClose;
 
 @end

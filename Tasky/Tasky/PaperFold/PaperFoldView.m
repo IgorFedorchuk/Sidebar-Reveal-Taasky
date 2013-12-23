@@ -145,24 +145,6 @@
 
 - (void)setBottomFoldContentView:(UIView*)view
 {
-    if (self.bottomFoldView) [self.bottomFoldView removeFromSuperview];
-    
-    self.bottomFoldView = [[FoldView alloc] initWithFrame:CGRectMake(0,self.frame.size.height-view.frame.size.height,view.frame.size.width,view.frame.size.height) foldDirection:FoldDirectionVertical];
-    [self.bottomFoldView setUseOptimizedScreenshot:self.useOptimizedScreenshot];
-    [self.bottomFoldView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    [self insertSubview:self.bottomFoldView belowSubview:self.contentView];
-    [self.bottomFoldView setContent:view];
-    [self.bottomFoldView setHidden:YES];
-    [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,self.frame.size.height,self.frame.size.width,1)];
-    [line setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
-    [self.contentView addSubview:line];
-    [line setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:0.5]];
-	line.alpha = 0;
-	self.bottomDividerLine = line;
-    
-    self.enableBottomFoldDragging = YES;
 }
 
 - (void)setRightFoldContentView:(UIView*)view foldCount:(int)rightViewFoldCount pullFactor:(float)rightViewPullFactor
@@ -195,24 +177,6 @@
 
 - (void)setTopFoldContentView:(UIView*)view topViewFoldCount:(int)topViewFoldCount topViewPullFactor:(float)topViewPullFactor
 {
-    self.topFoldView = [[MultiFoldView alloc] initWithFrame:CGRectMake(0,-1*view.frame.size.height,view.frame.size.width,view.frame.size.height) foldDirection:FoldDirectionVertical folds:topViewFoldCount pullFactor:topViewPullFactor];
-    [self.topFoldView setDelegate:self];
-    [self.topFoldView setUseOptimizedScreenshot:self.useOptimizedScreenshot];
-    [self.topFoldView setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleHeight];
-    [self.contentView insertSubview:self.topFoldView atIndex:0];
-    [self.topFoldView setContent:view];
-    [self.topFoldView setHidden:YES];
-    [view setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
-    
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,-1,self.contentView.frame.size.width,1)];
-    [line setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
-    [self.contentView addSubview:line];
-    [line setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleHeight];
-    [line setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:0.5]];
-	line.alpha = 0;
-	self.topDividerLine = line;
-    
-    self.enableTopFoldDragging = YES;
 }
 
 - (void)onContentViewPanned:(UIPanGestureRecognizer*)gesture

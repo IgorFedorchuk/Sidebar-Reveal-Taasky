@@ -27,7 +27,6 @@ typedef enum
 {
     FoldDirectionHorizontalRightToLeft = 0,
     FoldDirectionHorizontalLeftToRight = 1,
-    FoldDirectionVertical = 2,
 } FoldDirection;
 
 typedef enum
