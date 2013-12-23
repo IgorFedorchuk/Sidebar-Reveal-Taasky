@@ -446,7 +446,7 @@
                     y = -self.bottomFoldView.frame.size.height;
                 }
                 [self.contentView setTransform:CGAffineTransformMakeTranslation(0, y)];
-                [self.bottomFoldView unfoldWithParentOffset:y];
+              //!!!!!  [self.bottomFoldView unfoldWithParentOffset:y];
                 
                 if ([self.delegate respondsToSelector:@selector(paperFoldView:viewDidOffset:)])
                 {
@@ -480,7 +480,7 @@
         {
             
             [self.contentView setTransform:CGAffineTransformMakeTranslation(0, 0)];
-            [self.bottomFoldView unfoldWithParentOffset:y];
+       //!!!!!!!     [self.bottomFoldView unfoldWithParentOffset:y];
             [self.topFoldView unfoldWithParentOffset:y];
             self.state = PaperFoldStateDefault;
             

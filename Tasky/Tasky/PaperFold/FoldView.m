@@ -37,6 +37,12 @@
 #import "UIView+Screenshot.h"
 #import "ShadowView.h"
 
+@interface FoldView ()
+
+@property (nonatomic, strong) UIView *contentView;
+
+@end
+
 @implementation FoldView
 
 - (id)initWithFrame:(CGRect)frame
@@ -46,37 +52,28 @@
 
 - (id)initWithFrame:(CGRect)frame foldDirection:(FoldDirection)foldDirection
 {
-    self = [super initWithFrame:frame];
-    if (self) {
-        
-        _useOptimizedScreenshot = YES;
-        _foldDirection = foldDirection;
-        
+    if (self = [super initWithFrame:frame])
+    {
         // content view holds a subview which is the actual displayed content
         // contentView is required as a wrapper of the original content because it is better to take a screenshot of the wrapper view layer
         // taking a screenshot of a tableview layer directly for example, may end up with blank view because of recycled cells
         _contentView = [[UIView alloc] initWithFrame:CGRectMake(0,0,frame.size.width,frame.size.height)];
         [_contentView setBackgroundColor:[UIColor clearColor]];
         [self addSubview:_contentView];
+                
+        _rightView = [[FacingView alloc] initWithFrame:CGRectMake(-1*frame.size.width/2,0,frame.size.width, frame.size.height)];
+        [_rightView setBackgroundColor:[UIColor colorWithWhite:0.99 alpha:1]];
+        [_rightView.layer setAnchorPoint:CGPointMake(1.0, 0.5)];
+        [self addSubview:_rightView];
+        [_rightView.shadowView setColorArrays:[NSArray arrayWithObjects:[UIColor colorWithWhite:0 alpha:0.9],[UIColor colorWithWhite:0 alpha:0.55], nil]];
         
-        if (self.foldDirection==FoldDirectionHorizontalRightToLeft || self.foldDirection==FoldDirectionHorizontalLeftToRight)
-        {
-            // set anchor point of the rightView to the right edge
-            
-            _rightView = [[FacingView alloc] initWithFrame:CGRectMake(-1*frame.size.width/2,0,frame.size.width, frame.size.height)];
-            [_rightView setBackgroundColor:[UIColor colorWithWhite:0.99 alpha:1]];
-            [_rightView.layer setAnchorPoint:CGPointMake(1.0, 0.5)];
-            [self addSubview:_rightView];
-            [_rightView.shadowView setColorArrays:[NSArray arrayWithObjects:[UIColor colorWithWhite:0 alpha:0.9],[UIColor colorWithWhite:0 alpha:0.55], nil]];
-            
-            // set perspective of the transformation
-            CATransform3D transform = CATransform3DIdentity;
-            transform.m34 = -1/500.0;
-            [self.layer setSublayerTransform:transform];
-            
-            // make sure the views are closed properly when initialized
-            [_rightView.layer setTransform:CATransform3DMakeRotation((M_PI / 2), 0, 1, 0)];
-        }
+        // set perspective of the transformation
+        CATransform3D transform = CATransform3DIdentity;
+        transform.m34 = -1/500.0;
+        [self.layer setSublayerTransform:transform];
+        
+        // make sure the views are closed properly when initialized
+        [_rightView.layer setTransform:CATransform3DMakeRotation((M_PI / 2), 0, 1, 0)];
         
         [self setAutoresizesSubviews:YES];
         [_contentView setAutoresizesSubviews:YES];
@@ -87,135 +84,24 @@
 
 - (void)unfoldViewToFraction:(CGFloat)fraction offset:(float)offset
 {
-    if (self.foldDirection==FoldDirectionHorizontalRightToLeft  || self.foldDirection==FoldDirectionHorizontalLeftToRight)
-    {
-        float delta = asinf(fraction);
-        
-        // rotate rightView on the right edge of the view
-        // translate rotated view to the left to join to the edge of the leftView
-        CATransform3D transform1 = CATransform3DMakeTranslation(2*offset, 0, 0);
-        CATransform3D transform2 = CATransform3DMakeRotation((M_PI / 2) - delta, 0, -1, 0);
-        CATransform3D transform = CATransform3DConcat(transform2, transform1);
-        [self.rightView.layer setTransform:transform];
-        
-        // fade in shadow when folding
-        // fade out shadow when unfolding
-        [self.rightView.shadowView setAlpha:1-fraction];
-    }
-}
+    float delta = asinf(fraction);
 
-// set fold states based on offset value
-- (void)calculateFoldStateFromOffset:(float)offset
-{
-    CGFloat fraction = 0.0;
-    if (self.foldDirection==FoldDirectionHorizontalRightToLeft  || self.foldDirection==FoldDirectionHorizontalLeftToRight)
-    {
-        fraction = offset / self.frame.size.width;
-        if (fraction < 0) fraction = 0;
-        if (fraction > 1) fraction = 1;
-    }
-    
-    if (self.state==FoldStateClosed && fraction>0)
-    {
-        self.state = FoldStateTransition;
-        [self foldWillOpen];
-    }
-    else if (self.state==FoldStateOpened && fraction<1)
-    {
-        self.state = FoldStateTransition;
-        [self foldWillClose];
-        
-    }
-    else if (self.state==FoldStateTransition)
-    {
-        if (fraction==0)
-        {
-            self.state = FoldStateClosed;
-            [self foldDidClosed];
-        }
-        else if (fraction==1)
-        {
-            self.state = FoldStateOpened;
-            [self foldDidOpened];
-        }
-    }
-}
+    // rotate rightView on the right edge of the view
+    // translate rotated view to the left to join to the edge of the leftView
+    CATransform3D transform1 = CATransform3DMakeTranslation(2*offset, 0, 0);
+    CATransform3D transform2 = CATransform3DMakeRotation((M_PI / 2) - delta, 0, -1, 0);
+    CATransform3D transform = CATransform3DConcat(transform2, transform1);
+    [self.rightView.layer setTransform:transform];
 
-- (void)unfoldWithParentOffset:(float)offset
-{
-    [self calculateFoldStateFromOffset:offset];
-
-    CGFloat fraction = 0.0;
-    if (self.foldDirection==FoldDirectionHorizontalRightToLeft  || self.foldDirection==FoldDirectionHorizontalLeftToRight)
-    {
-        fraction = offset / self.frame.size.width;
-        if (fraction < 0) fraction = 0;
-        if (fraction > 1) fraction = 1;
-        
-        [self unfoldViewToFraction:fraction offset:offset];
-    }
-    
-    [self unfoldViewToFraction:fraction offset:offset];
+    [self.rightView.shadowView setAlpha:1-fraction];
 }
 
 - (void)setImage:(UIImage*)image
 {
-    // split the image into 2, one for each folds
-    if (self.foldDirection==FoldDirectionHorizontalRightToLeft  || self.foldDirection==FoldDirectionHorizontalLeftToRight)
-    {
-        CGImageRef imageRef2 = CGImageCreateWithImageInRect([image CGImage], CGRectMake(0, 0, image.size.width*image.scale, image.size.height*image.scale));
-        [self.rightView.layer setContents:(__bridge id)imageRef2];
-        CFRelease(imageRef2);
-    }
-}
-
-- (void)setContent:(UIView *)contentView
-{
-    // add the actual visible view, as a subview of _contentView
-    [contentView setFrame:CGRectMake(0,0,contentView.frame.size.width,contentView.frame.size.height)];
-    [self.contentView addSubview:contentView];
-    [self drawScreenshotOnFolds];
+    CGImageRef imageRef2 = CGImageCreateWithImageInRect([image CGImage], CGRectMake(0, 0, image.size.width*image.scale, image.size.height*image.scale));
+    [self.rightView.layer setContents:(__bridge id)imageRef2];
+    CFRelease(imageRef2);
 }
 
 
-- (void)drawScreenshotOnFolds
-{
-    UIImage *image = [self.contentView screenshotWithOptimization:self.useOptimizedScreenshot];
-    [self setImage:image];
-}
-
-- (void)showFolds:(BOOL)show
-{
-    if (self.foldDirection==FoldDirectionHorizontalRightToLeft  || self.foldDirection==FoldDirectionHorizontalLeftToRight)
-    {
-        [self.rightView setHidden:!show];
-    }
-}
-
-#pragma mark states
-
-- (void)foldDidOpened
-{
-    [self.contentView setHidden:NO];
-    [self showFolds:NO];
-}
-
-- (void)foldDidClosed
-{
-    [self.contentView setHidden:NO];
-    [self showFolds:YES];
-}
-
-- (void)foldWillOpen
-{
-    [self.contentView setHidden:YES];
-    [self showFolds:YES];
-}
-
-- (void)foldWillClose
-{
-    [self drawScreenshotOnFolds];
-    [_contentView setHidden:YES];
-    [self showFolds:YES];
-}
 @end

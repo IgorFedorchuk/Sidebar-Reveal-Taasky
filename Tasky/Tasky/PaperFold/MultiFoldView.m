@@ -61,7 +61,7 @@
             if (_foldDirection==FoldDirectionHorizontalLeftToRight || _foldDirection==FoldDirectionHorizontalRightToLeft)
             {
                 float foldWidth = frame.size.width/self.numberOfFolds;
-                FoldView *foldView = [[FoldView alloc] initWithFrame:CGRectMake(foldWidth*i,0,foldWidth,frame.size.height) foldDirection:foldDirection];
+                FoldView *foldView = [[FoldView alloc] initWithFrame:CGRectMake(foldWidth*i,0,foldWidth,frame.size.height)];
                 [foldView setTag:FOLDVIEW_TAG+i];
                 [self addSubview:foldView];
             }
