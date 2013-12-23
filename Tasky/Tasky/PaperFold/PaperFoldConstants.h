@@ -42,7 +42,6 @@ typedef enum
 typedef enum
 {
     PaperFoldInitialPanDirectionHorizontal = 0,
-    PaperFoldInitialPanDirectionVertical = 1,
 } PaperFoldInitialPanDirection;
 
 #endif

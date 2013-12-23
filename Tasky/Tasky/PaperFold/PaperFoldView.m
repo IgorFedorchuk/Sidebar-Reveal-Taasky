@@ -185,16 +185,8 @@
                     {
                         self.paperFoldInitialPanDirection = PaperFoldInitialPanDirectionHorizontal;
                     }
-                    else self.paperFoldInitialPanDirection = PaperFoldInitialPanDirectionVertical;
                 }
                 else self.paperFoldInitialPanDirection = PaperFoldInitialPanDirectionHorizontal;
-            }
-        }
-        else
-        {
-            if (self.state==PaperFoldStateDefault)
-            {
-                self.paperFoldInitialPanDirection = PaperFoldInitialPanDirectionVertical;
             }
         }
     }
@@ -369,55 +361,6 @@
             }
         }
     }
-    else if (self.paperFoldInitialPanDirection==PaperFoldInitialPanDirectionVertical)
-    {
-        float y = point.y;
-        // if offset to the top, show the bottom view
-        // if offset to the bottom, show the top multi-fold view
-        
-        if (self.state!=self.lastState) self.lastState = self.state;
-        
-        if (y<0.0)
-        {
-            if (self.enableBottomFoldDragging || !panned)
-            {
-                [self.contentView setTransform:CGAffineTransformMakeTranslation(0, y)];
-                
-                if ([self.delegate respondsToSelector:@selector(paperFoldView:viewDidOffset:)])
-                {
-                    [self.delegate paperFoldView:self viewDidOffset:CGPointMake(0,y)];
-                }
-            }
-        }
-        else if (y>0.0)
-        {
-            if (self.enableTopFoldDragging || !panned)
-            {
-                // set the limit of the bottom offset
-                // original y value not changed, to be sent to multi-fold view
-                float y1 = y;
-                
-                [self.contentView setTransform:CGAffineTransformMakeTranslation(0, y1)];
-                
-                if ([self.delegate respondsToSelector:@selector(paperFoldView:viewDidOffset:)])
-                {
-                    [self.delegate paperFoldView:self viewDidOffset:CGPointMake(0,y)];
-                }
-            }
-        }
-        else
-        {
-            
-            [self.contentView setTransform:CGAffineTransformMakeTranslation(0, 0)];
-            self.state = PaperFoldStateDefault;
-            
-            if ([self.delegate respondsToSelector:@selector(paperFoldView:viewDidOffset:)])
-            {
-                [self.delegate paperFoldView:self viewDidOffset:CGPointMake(0,y)];
-            }
-        }
-    }
-    
 }
 
 // unfold the left view
@@ -497,34 +440,6 @@
         {
             // use the x value to animate folding
             [self animateWithContentOffset:CGPointMake(self.contentView.frame.origin.x, 0) panned:NO];
-        }
-    }
-    else if (self.paperFoldInitialPanDirection==PaperFoldInitialPanDirectionVertical)
-    {
-        CGAffineTransform transform = [self.contentView transform];
-        // restoring the y position 3/4 of the last y translation
-        float y = transform.ty/4*3;
-        transform = CGAffineTransformMakeTranslation(0, y);
-        [self.contentView setTransform:transform];
-        
-        // if -5<x<5, stop timer animation
-        if ((y>=0 && y<5) || (y<=0 && y>-5))
-        {
-            [timer invalidate];
-            transform = CGAffineTransformMakeTranslation(0, 0);
-            [self.contentView setTransform:transform];
-            [self animateWithContentOffset:CGPointMake(0, 0) panned:NO];
-            
-			if (self.lastState != PaperFoldStateDefault) {
-				[self finishForState:PaperFoldStateDefault];
-			}
-			self.state = PaperFoldStateDefault;
-            
-        }
-        else
-        {
-            // use the x value to animate folding
-            [self animateWithContentOffset:CGPointMake(0,self.contentView.frame.origin.y) panned:NO];
         }
     }
 }
