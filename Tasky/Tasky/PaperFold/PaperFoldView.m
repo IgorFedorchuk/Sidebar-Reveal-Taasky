@@ -143,10 +143,6 @@
     self.enableLeftFoldDragging = YES;
 }
 
-- (void)setBottomFoldContentView:(UIView*)view
-{
-}
-
 - (void)setRightFoldContentView:(UIView*)view foldCount:(int)rightViewFoldCount pullFactor:(float)rightViewPullFactor
 {
     self.rightFoldView = [[MultiFoldView alloc] initWithFrame:CGRectMake(self.frame.size.width,0,view.frame.size.width,self.frame.size.height) foldDirection:FoldDirectionHorizontalRightToLeft folds:rightViewFoldCount pullFactor:rightViewPullFactor];
@@ -173,10 +169,6 @@
 - (void)setRightFoldContentView:(UIView*)view rightViewFoldCount:(int)rightViewFoldCount rightViewPullFactor:(float)rightViewPullFactor
 {
     [self setRightFoldContentView:view foldCount:rightViewFoldCount pullFactor:rightViewPullFactor];
-}
-
-- (void)setTopFoldContentView:(UIView*)view topViewFoldCount:(int)topViewFoldCount topViewPullFactor:(float)topViewPullFactor
-{
 }
 
 - (void)onContentViewPanned:(UIPanGestureRecognizer*)gesture

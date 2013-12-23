@@ -97,18 +97,10 @@ typedef void (^CompletionBlock)();
 // with the number of folds and pull factor
 - (void)setRightFoldContentView:(UIView*)view foldCount:(int)rightViewFoldCount pullFactor:(float)rightViewPullFactor;
 
-// set the top fold content view
-// and the top fold container view
-// with the number of folds and pull factor
-- (void)setTopFoldContentView:(UIView*)view topViewFoldCount:(int)topViewFoldCount topViewPullFactor:(float)topViewPullFactor;
-
 // set the left fold content view
 // and set the left fold container view frame
 - (void)setLeftFoldContentView:(UIView*)view foldCount:(int)leftViewFoldCount pullFactor:(float)leftViewPullFactor;
 
-// set the bottom fold content view
-// and set the bottom fold container view frame
-- (void)setBottomFoldContentView:(UIView*)view;
 
 - (void)setCenterContentView:(UIView*)view;
 
