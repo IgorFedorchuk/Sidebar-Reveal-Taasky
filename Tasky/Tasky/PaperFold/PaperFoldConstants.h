@@ -9,7 +9,6 @@
 #ifndef PaperFold_PaperFoldConstants_h
 #define PaperFold_PaperFoldConstants_h
 
-#define FOLDVIEW_TAG 1000
 #define kLeftViewUnfoldThreshold 0.3
 #define kRightViewUnfoldThreshold 0.3
 #define kTopViewUnfoldThreshold 0.3

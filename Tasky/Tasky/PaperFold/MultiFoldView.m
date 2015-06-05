@@ -36,9 +36,10 @@
 #import "UIView+Screenshot.h"
 #import <MapKit/MapKit.h>
 
+const NSInteger FOLDVIEW_TAG = 1000;
+
 @implementation MultiFoldView
 
-#define FOLDVIEW_TAG 1000
 
 - (id)initWithFrame:(CGRect)frame folds:(int)folds pullFactor:(float)factor
 {
@@ -184,7 +185,7 @@
     [foldView setFrame:CGRectMake(offset - 2*foldView.rightView.frame.size.width, 0, foldView.frame.size.width, foldView.frame.size.height)];
     
     // check if there is another subfold beside this fold
-    int index = [foldView tag] - FOLDVIEW_TAG;
+    NSInteger index = [foldView tag] - FOLDVIEW_TAG;
     if (index < self.numberOfFolds-1)
     {
         FoldView *nextFoldView = (FoldView*)[self viewWithTag:FOLDVIEW_TAG+index+1];

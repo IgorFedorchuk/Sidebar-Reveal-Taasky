@@ -29,7 +29,7 @@
     for (NSInteger i = 0; i < 3; i++)
     {
         DemoRootViewController *rootViewController = [[DemoRootViewController alloc] init];
-        [rootViewController setTitle:[NSString stringWithFormat:@"%i", i+1]];
+        [rootViewController setTitle:[NSString stringWithFormat:@"%li", i+1]];
         UINavigationController *rootNavController = [[UINavigationController alloc] initWithRootViewController:rootViewController];
         [viewControllers addObject:rootNavController];
     }
