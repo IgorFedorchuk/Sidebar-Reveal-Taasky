@@ -13,14 +13,13 @@
 @interface AppDelegate ()
 
 @property (nonatomic, strong) DemoMenuController *menuController;
+
 @end
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
+{    
     _menuController = [[DemoMenuController alloc] initWithMenuWidth:80];
     [self.window setRootViewController:_menuController];
     

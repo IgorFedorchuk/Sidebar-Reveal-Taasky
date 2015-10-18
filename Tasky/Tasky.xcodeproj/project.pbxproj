@@ -18,6 +18,7 @@
 		6F582DB918648B3300D44537 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F582D9B18648B3300D44537 /* UIKit.framework */; };
 		6F582DC118648B3300D44537 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6F582DBF18648B3300D44537 /* InfoPlist.strings */; };
 		6F582DC318648B3300D44537 /* TaskyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F582DC218648B3300D44537 /* TaskyTests.m */; };
+		778142921BD3A1B700E44E1F /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 778142911BD3A1B700E44E1F /* MainWindow.xib */; settings = {ASSET_TAGS = (); }; };
 		788589A1186796C1004FC03F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 788589A0186796C1004FC03F /* Images.xcassets */; };
 		78FB57D81865E193003CD030 /* FacingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB57C21865E193003CD030 /* FacingView.m */; };
 		78FB57D91865E193003CD030 /* FoldView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB57C41865E193003CD030 /* FoldView.m */; };
@@ -25,7 +26,6 @@
 		78FB57DE1865E193003CD030 /* PaperFoldView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB57CE1865E193003CD030 /* PaperFoldView.m */; };
 		78FB57E11865E193003CD030 /* ShadowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB57D31865E193003CD030 /* ShadowView.m */; };
 		78FB57E31865E193003CD030 /* UIView+Screenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FB57D71865E193003CD030 /* UIView+Screenshot.m */; };
-		78FB57ED1865E5A6003CD030 /* Reveal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78FB57EC1865E5A6003CD030 /* Reveal.framework */; };
 		78FB57EF1865E5E8003CD030 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78FB57EE1865E5E8003CD030 /* CFNetwork.framework */; };
 		78FB57F31865E956003CD030 /* cellBg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78FB57F11865E956003CD030 /* cellBg@2x.png */; };
 		78FB57F41865E956003CD030 /* cellBgSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78FB57F21865E956003CD030 /* cellBgSelected@2x.png */; };
@@ -60,6 +60,7 @@
 		6F582DBE18648B3300D44537 /* TaskyTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TaskyTests-Info.plist"; sourceTree = "<group>"; };
 		6F582DC018648B3300D44537 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6F582DC218648B3300D44537 /* TaskyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TaskyTests.m; sourceTree = "<group>"; };
+		778142911BD3A1B700E44E1F /* MainWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		788589A0186796C1004FC03F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		78FB57C11865E193003CD030 /* FacingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacingView.h; sourceTree = "<group>"; };
 		78FB57C21865E193003CD030 /* FacingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacingView.m; sourceTree = "<group>"; };
@@ -74,7 +75,6 @@
 		78FB57D31865E193003CD030 /* ShadowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShadowView.m; sourceTree = "<group>"; };
 		78FB57D61865E193003CD030 /* UIView+Screenshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Screenshot.h"; sourceTree = "<group>"; };
 		78FB57D71865E193003CD030 /* UIView+Screenshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Screenshot.m"; sourceTree = "<group>"; };
-		78FB57EC1865E5A6003CD030 /* Reveal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Reveal.framework; sourceTree = "<group>"; };
 		78FB57EE1865E5E8003CD030 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		78FB57F11865E956003CD030 /* cellBg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cellBg@2x.png"; sourceTree = "<group>"; };
 		78FB57F21865E956003CD030 /* cellBgSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cellBgSelected@2x.png"; sourceTree = "<group>"; };
@@ -96,7 +96,6 @@
 				6F582D9A18648B3300D44537 /* CoreGraphics.framework in Frameworks */,
 				6F582D9C18648B3300D44537 /* UIKit.framework in Frameworks */,
 				6F582D9818648B3300D44537 /* Foundation.framework in Frameworks */,
-				78FB57ED1865E5A6003CD030 /* Reveal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,7 +135,6 @@
 			isa = PBXGroup;
 			children = (
 				78FB57EE1865E5E8003CD030 /* CFNetwork.framework */,
-				78FB57EC1865E5A6003CD030 /* Reveal.framework */,
 				6F582D9718648B3300D44537 /* Foundation.framework */,
 				6F582D9918648B3300D44537 /* CoreGraphics.framework */,
 				6F582D9B18648B3300D44537 /* UIKit.framework */,
@@ -148,6 +146,7 @@
 		6F582D9D18648B3300D44537 /* Tasky */ = {
 			isa = PBXGroup;
 			children = (
+				778142911BD3A1B700E44E1F /* MainWindow.xib */,
 				6F582DA618648B3300D44537 /* AppDelegate.h */,
 				6F582DA718648B3300D44537 /* AppDelegate.m */,
 				788589A0186796C1004FC03F /* Images.xcassets */,
@@ -311,6 +310,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				788589A1186796C1004FC03F /* Images.xcassets in Resources */,
+				778142921BD3A1B700E44E1F /* MainWindow.xib in Resources */,
 				78FB57F41865E956003CD030 /* cellBgSelected@2x.png in Resources */,
 				6F582DA218648B3300D44537 /* InfoPlist.strings in Resources */,
 				78FB57F31865E956003CD030 /* cellBg@2x.png in Resources */,
@@ -469,11 +469,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tasky/Tasky-Prefix.pch";
 				INFOPLIST_FILE = "Tasky/Tasky-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tasky.igor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -492,11 +493,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tasky/Tasky-Prefix.pch";
 				INFOPLIST_FILE = "Tasky/Tasky-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tasky.igor;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
