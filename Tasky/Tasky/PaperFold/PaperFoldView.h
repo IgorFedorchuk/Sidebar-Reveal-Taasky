@@ -36,7 +36,7 @@
 #import "FoldView.h"
 #import "MultiFoldView.h"
 
-typedef void (^CompletionBlock)();
+typedef void (^CompletionBlock)(void);
 
 @protocol PaperFoldViewDelegate <NSObject>
 @optional

@@ -338,7 +338,7 @@
 
 - (void)setPaperFoldState:(PaperFoldState)state
 								 animated:(BOOL)animated
-							 completion:(void (^)())completion
+               completion:(void (^)(void))completion
 {
 	self.completionBlock = completion;
 	[self setPaperFoldState:state animated:animated];
